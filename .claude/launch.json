@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Next.js (superflat)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "superflat"],
+      "port": 3000
+    },
+    {
+      "name": "Sanity Studio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "SanityStudio"],
+      "port": 3333
+    }
+  ]
+}

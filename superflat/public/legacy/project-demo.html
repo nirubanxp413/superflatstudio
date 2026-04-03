@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>King's Command — NIRUBAN (Demo)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --black: #0a0a0a; --white: #f0f0f0; --gray: #666; --border: #333; }
+  html, body { min-height: 100%; background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999;
+  }
+  .logo { position: fixed; top: 34px; left: 40px; font-size: 22px; z-index: 100; }
+  .logo a { color: inherit; text-decoration: none; }
+  .nav-corner { position: fixed; top: 36px; right: 50px; display: flex; gap: 30px; z-index: 100; }
+  .nav-corner a { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); text-decoration: none; }
+  .nav-corner a:hover { color: var(--white); }
+  .back-link { position: fixed; bottom: 40px; left: 40px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); text-decoration: none; z-index: 100; }
+  .back-link:hover { color: var(--white); }
+
+  main { padding: 0 0 100px; }
+  .project-header { max-width: 720px; margin: 0 auto; padding: 120px 40px 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .project-category { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gray); margin-bottom: 16px; }
+  .project-title { font-size: 42px; line-height: 1.1; margin-bottom: 20px; }
+  .project-desc { font-size: 15px; line-height: 1.7; color: var(--gray); }
+
+  .block-hero-image { width: 100vw; height: 100vh; margin-left: calc(-50vw + 50%); overflow: hidden; }
+  .block-hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .block-hero-code {
+    width: 100vw; height: 100vh; margin-left: calc(-50vw + 50%);
+    display: flex; align-items: center; justify-content: center;
+    background: #0d0d0d; font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.6;
+    overflow: auto; padding: 40px;
+  }
+  .block-hero-code pre { color: var(--gray); white-space: pre-wrap; }
+
+  .block-title { max-width: 720px; margin: 0 auto; padding: 80px 40px 40px; }
+  .block-title h2 { font-size: 32px; font-weight: 600; text-align: left; }
+
+  .block-thinking-gallery {
+    width: 100%; display: grid; grid-template-columns: 1fr 2fr; gap: 0; min-height: 60vh;
+  }
+  .thinking-gallery-text { padding: 60px 48px; border-right: 1px solid var(--border); }
+  .thinking-gallery-text h3 { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+  .thinking-gallery-text p { font-size: 15px; line-height: 1.7; color: var(--gray); }
+  .thinking-gallery-images { display: flex; flex-wrap: wrap; gap: 0; align-content: flex-start; }
+  .thinking-gallery-images .img-full { width: 100%; padding: 2px; }
+  .thinking-gallery-images .img-half { width: 50%; padding: 2px; box-sizing: border-box; }
+  .thinking-gallery-images img { width: 100%; height: auto; display: block; object-fit: cover; min-height: 200px; }
+
+  .block-code-canvas { max-width: 720px; margin: 0 auto; padding: 60px 40px; }
+  .block-code-canvas .code-header { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gray); margin-bottom: 12px; }
+  .block-code-canvas pre { font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.6; background: #111; border: 1px solid var(--border); border-radius: 4px; padding: 24px; overflow-x: auto; color: var(--gray); }
+
+  .block-text { max-width: 720px; margin: 0 auto; padding: 40px; font-size: 16px; line-height: 1.8; }
+  .block-text p { margin-bottom: 1.5em; }
+  .block-text h2 { font-size: 24px; font-weight: 600; margin: 2em 0 1em; }
+  .block-text blockquote { font-family: 'IBM Plex Mono', monospace; font-size: 14px; border-left: 2px solid var(--border); padding-left: 24px; margin: 2em 0; color: var(--gray); }
+
+  .block-text-sketchbook { max-width: 720px; margin: 0 auto; padding: 60px 40px; }
+  .block-text-sketchbook .sketchbook-content { font-size: 16px; line-height: 1.8; }
+  .block-text-sketchbook .sketchbook-content p { margin-bottom: 1.5em; }
+  .block-text-sketchbook .sketchbook-images { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 32px; justify-content: space-around; }
+  .block-text-sketchbook .sketchbook-images img { max-width: 280px; height: auto; opacity: 0.9; }
+
+  .block-image { max-width: 720px; margin: 0 auto; padding: 40px; }
+  .block-image img { width: 100%; height: auto; display: block; border-radius: 4px; }
+  .block-image .caption { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray); margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<div class="logo"><a href="index.html">N.</a></div>
+<nav class="nav-corner">
+  <a href="index.html">Work</a>
+  <a href="#">About</a>
+  <a href="#">Contact</a>
+</nav>
+
+<main>
+  <header class="project-header">
+    <div class="project-category">GAME DESIGN</div>
+    <h1 class="project-title">King's Command</h1>
+    <p class="project-desc">A turn-based tactics game where players command autonomous AI soldiers through natural language orders. Exploring the boundary between strategic intent and emergent behaviour.</p>
+  </header>
+
+  <!-- Hero Image -->
+  <section class="block-hero-image">
+    <img src="https://placehold.co/1920x1080/0d0d0d/2a2a2a?text=Hero+Image+%E2%80%94+Full+Viewport" alt="">
+  </section>
+
+  <!-- Hero Code -->
+  <section class="block-hero-code">
+    <pre>// Hero Code — spans full viewport
+const orders = await parseNaturalLanguage(input);
+
+orders.forEach(order => {
+  const intent = extractIntent(order);
+  execute(intent);
+});</pre>
+  </section>
+
+  <!-- Title -->
+  <section class="block-title">
+    <h2>The premise</h2>
+  </section>
+
+  <!-- Text -->
+  <section class="block-text">
+    <p>What if you could command units in a tactics game the way you'd brief a team in real life? "Flank from the left, hold fire until they're in range, retreat if outnumbered." The game became a vehicle for exploring how LLMs interpret tactical language.</p>
+    <blockquote>Strategy emerges from the gap between what you say and what the system understands.</blockquote>
+  </section>
+
+  <!-- Thinking Gallery -->
+  <section class="block-thinking-gallery">
+    <div class="thinking-gallery-text">
+      <h3>Process & artefacts</h3>
+      <p>Early iterations had the LLM generating moves directly. We switched to intent extraction + deterministic execution so players could debug "why did it do that?"</p>
+    </div>
+    <div class="thinking-gallery-images">
+      <div class="img-full"><img src="https://placehold.co/800x400/111/333?text=Full+width+image" alt=""></div>
+      <div class="img-half"><img src="https://placehold.co/400x300/111/333?text=Half+1" alt=""></div>
+      <div class="img-half"><img src="https://placehold.co/400x300/111/333?text=Half+2" alt=""></div>
+    </div>
+  </section>
+
+  <!-- Code Canvas -->
+  <section class="block-code-canvas">
+    <div class="code-header">order_parser.js</div>
+    <pre>function parseOrder(order) {
+  const intent = llm.extract(order, schema);
+  return intent.actions.map(a => new Action(a));
+}</pre>
+  </section>
+
+  <!-- Text Sketchbook -->
+  <section class="block-text-sketchbook">
+    <div class="sketchbook-content">
+      <p>A sketchbook-style section where text and images interleave. Images appear at random positions around the prose — like notes scattered across a desk.</p>
+    </div>
+    <div class="sketchbook-images">
+      <img src="https://placehold.co/280x180/111/333?text=Sketch+1" alt="">
+      <img src="https://placehold.co/280x180/111/333?text=Sketch+2" alt="">
+      <img src="https://placehold.co/280x180/111/333?text=Sketch+3" alt="">
+    </div>
+  </section>
+
+  <!-- Image -->
+  <section class="block-image">
+    <img src="https://placehold.co/800x450/111/333?text=Final+deliverable" alt="">
+    <div class="caption">Alpha build — unit state visualization</div>
+  </section>
+</main>
+
+<a href="index.html" class="back-link">← Back to Work</a>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>King's Command — NIRUBAN (Mock)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --black: #0a0a0a; --white: #f0f0f0; --gray: #666; --border: #333; }
+  html, body { min-height: 100%; background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999;
+  }
+  .logo { position: fixed; top: 34px; left: 40px; font-size: 22px; z-index: 100; }
+  .logo a { color: inherit; text-decoration: none; }
+  .nav-corner { position: fixed; top: 36px; right: 50px; display: flex; gap: 30px; z-index: 100; }
+  .nav-corner a { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); text-decoration: none; }
+  .nav-corner a:hover { color: var(--white); }
+  .back-link { position: fixed; bottom: 40px; left: 40px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); text-decoration: none; z-index: 100; }
+  .back-link:hover { color: var(--white); }
+
+  main { max-width: 720px; margin: 0 auto; padding: 120px 40px 100px; }
+
+  .project-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .project-category { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gray); margin-bottom: 16px; }
+  .project-title { font-size: 42px; line-height: 1.1; margin-bottom: 20px; }
+  .project-desc { font-size: 15px; line-height: 1.7; color: var(--gray); }
+
+  .content-section { margin-bottom: 4em; }
+  .content-section h2 { font-size: 24px; font-weight: 600; margin: 2.5em 0 1em; }
+  .content-section p { font-size: 16px; line-height: 1.8; margin-bottom: 1.5em; }
+  .content-section blockquote { font-family: 'IBM Plex Mono', monospace; font-size: 14px; border-left: 2px solid var(--border); padding-left: 24px; margin: 2em 0; color: var(--gray); }
+
+  /* Code block */
+  .code-block { margin: 2em 0; }
+  .code-block-header { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gray); margin-bottom: 8px; }
+  .code-block pre { font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.6; background: #111; border: 1px solid var(--border); border-radius: 4px; padding: 20px; overflow-x: auto; }
+  .code-block .comment { color: #666; }
+
+  /* Thinking / process note */
+  .thinking-block { font-family: 'IBM Plex Mono', monospace; font-size: 13px; background: #111; border-left: 3px solid var(--white); padding: 20px 24px; margin: 2em 0; color: var(--gray); }
+  .thinking-block .label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--white); margin-bottom: 12px; }
+
+  /* Image */
+  .media-block { margin: 2em 0; }
+  .media-block img { width: 100%; height: auto; display: block; border-radius: 4px; }
+  .media-block .caption { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray); margin-top: 12px; }
+
+  /* Project updates section */
+  .updates-section { margin-top: 4em; padding-top: 3em; border-top: 1px solid var(--border); }
+  .updates-section h2 { margin-top: 0; }
+  .update { margin-bottom: 3em; padding-bottom: 2em; border-bottom: 1px solid var(--border); }
+  .update:last-child { border-bottom: none; }
+  .update-date { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gray); margin-bottom: 8px; }
+  .update-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+  .update-body p { font-size: 15px; line-height: 1.7; margin-bottom: 1em; color: var(--gray); }
+
+  .badge { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.2em; padding: 4px 10px; border: 1px solid var(--border); border-radius: 2px; color: var(--gray); margin-right: 8px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="logo"><a href="index.html">N.</a></div>
+<nav class="nav-corner">
+  <a href="index.html">Work</a>
+  <a href="#">About</a>
+  <a href="#">Contact</a>
+</nav>
+
+<main>
+  <header class="project-header">
+    <div class="project-category">GAME DESIGN</div>
+    <h1 class="project-title">King's Command</h1>
+    <p class="project-desc">A turn-based tactics game where players command autonomous AI soldiers through natural language orders. Exploring the boundary between strategic intent and emergent behaviour.</p>
+  </header>
+
+  <!-- MAIN CONTENT: flexible blocks, order varies per project -->
+  <section class="content-section">
+    <h2>The premise</h2>
+    <p>What if you could command units in a tactics game the way you'd brief a team in real life? "Flank from the left, hold fire until they're in range, retreat if outnumbered." The game became a vehicle for exploring how LLMs interpret tactical language.</p>
+
+    <blockquote>Strategy emerges from the gap between what you say and what the system understands.</blockquote>
+
+    <div class="code-block">
+      <div class="code-block-header">order_parser.py — extracting intent from natural language</div>
+      <pre><span class="comment"># First pass: chunk the order into atomic actions</span>
+def parse_order(order: str) -> list[Action]:
+    intent = llm.extract(order, schema=ActionSchema)
+    return [Action(**a) for a in intent.actions]</pre>
+    </div>
+
+    <div class="thinking-block">
+      <div class="label">Process note</div>
+      Early iterations had the LLM generating moves directly. That felt like a black box. We switched to intent extraction + a deterministic execution layer so players could debug "why did it do that?"
+    </div>
+
+    <div class="media-block">
+      <img src="https://placehold.co/800x450/1a1a1a/666?text=Gameplay+screenshot" alt="Gameplay">
+      <div class="caption">Alpha build — unit state visualization</div>
+    </div>
+
+    <h2>Artefacts</h2>
+    <p>Key deliverables from this project:</p>
+    <p><span class="badge">Prototype</span> <span class="badge">Design doc</span> <span class="badge">Code</span></p>
+    <p>A playable prototype, a 12-page design doc on the command language, and the core order-parsing pipeline (Python + LangChain).</p>
+  </section>
+
+  <!-- PROJECT UPDATES: chronological log of progress/reflections -->
+  <section class="updates-section">
+    <h2>Project updates</h2>
+
+    <article class="update">
+      <div class="update-date">2024-03-01</div>
+      <h3 class="update-title">First playable</h3>
+      <div class="update-body">
+        <p>Got the basic loop working. Players type orders, units execute. The "retreat if outnumbered" logic is still brittle — need to define a clearer threshold system.</p>
+      </div>
+    </article>
+
+    <article class="update">
+      <div class="update-date">2024-02-15</div>
+      <h3 class="update-title">Switched to intent extraction</h3>
+      <div class="update-body">
+        <p>After a few playtests, direct LLM-to-move was too opaque. Refactored to extract structured intent first, then run a deterministic executor. Much easier to reason about.</p>
+      </div>
+    </article>
+
+    <article class="update">
+      <div class="update-date">2024-01-20</div>
+      <h3 class="update-title">Project kickoff</h3>
+      <div class="update-body">
+        <p>Started exploring natural language as a command interface for tactics games. Initial prototype used a simple keyword parser — quickly hit its limits.</p>
+      </div>
+    </article>
+  </section>
+</main>
+
+<a href="index.html" class="back-link">← Back to Work</a>
+
+</body>
+</html>

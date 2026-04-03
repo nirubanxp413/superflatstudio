@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # Dependencies
 /node_modules
 /.pnp
@@ -27,6 +25,3 @@
 
 # Dotenv and similar local-only files
 *.local
-
-# Nested git worktrees (avoid submodule/gitlink issues)
-ToVModulator/.claude/worktrees/

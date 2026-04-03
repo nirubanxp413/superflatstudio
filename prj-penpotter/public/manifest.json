@@ -1,0 +1,7 @@
+{
+  "name": "PenpotChat",
+  "description": "AI chat assistant for Penpot (Mastra agent + canvas tools)",
+  "code": "/plugin.js",
+  "icon": "/icon.png",
+  "permissions": ["content:read", "content:write", "library:read", "user:read"]
+}

@@ -1,9 +1,28 @@
-# Sanity Clean Content Studio
+# Superflat Studio
 
-Congratulations, you have now installed the Sanity Content Studio, an open-source real-time content editing environment connected to the Sanity backend.
+Portfolio CMS and frontend monorepo.
 
-Now you can do the following things:
+## Structure
 
-- [Read “getting started” in the docs](https://www.sanity.io/docs/introduction/getting-started?utm_source=readme)
-- [Join the community Slack](https://slack.sanity.io/?utm_source=readme)
-- [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
+- **studio/** — Sanity CMS (content editing, schemas, deployment)
+- **Frontend/** — Static frontend that displays the portfolio
+- **ToVModulator/** — Tone Modulator app (separate project)
+
+## Commands
+
+**Sanity Studio** (from root):
+```bash
+npm run studio:dev      # Start Sanity Studio
+npm run studio:build    # Build for deployment
+npm run studio:deploy   # Deploy Studio
+```
+
+Or run directly from `studio/`:
+```bash
+cd studio && npm run dev
+```
+
+**Frontend**:
+```bash
+npm run frontend:serve  # Serve Frontend at localhost:3000
+```

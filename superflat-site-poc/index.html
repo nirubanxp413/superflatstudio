@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Superflat Site POC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@200;400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell" id="appShell">
+    <div class="main-scroll-viewport" id="mainScrollViewport">
+      <div class="vertical-strip" id="verticalStrip">
+        <div class="strip-hero" id="stripHero">
+          <div class="hero-container" id="heroContainer">
+            <div class="content" id="content">
+              <div class="header-row" id="headerRow"></div>
+              <div class="content-row" id="contentRow"></div>
+            </div>
+          </div>
+        </div>
+        <section class="thoughts-area" id="thoughtsArea" aria-hidden="true">
+          <div class="thoughts-list" id="thoughtsList"></div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="hero-footer" id="heroFooter">
+      <div class="hero-footer-left">
+        <button class="nav-button nav-thought" id="thoughtButton" type="button">THOUGHT&gt;</button>
+        <div class="nav-divider"></div>
+        <button class="nav-button nav-work" id="workButton" type="button">WORK&gt;</button>
+        <div class="work-reveal" id="workReveal">
+          <div class="work-reveal-inner">
+            <button class="nav-button nav-sub" data-target="projects" type="button">
+              <span class="nav-sub-clip"><span class="nav-sub-text">PROJECTS</span></span>
+            </button>
+            <button class="nav-button nav-sub" data-target="sketches" type="button">
+              <span class="nav-sub-clip"><span class="nav-sub-text">SKETCHES</span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button class="nav-button nav-about" id="aboutButton" type="button">ABOUT&gt;</button>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+  /* === Carbon site tokens (light theme) === */
+  --background: #f4f4f4;
+  --layer-01: #f4f4f4;
+  --layer-02: #e8e8e8;
+  --border-subtle: #e0e0e0;
+  --border-strong: #8d8d8d;
+  --text-primary: #161616;
+  --text-secondary: #525252;
+  --text-muted: #a8a8a8;
+  --interactive: #0043CE;
+  --interactive-hover: #002d9c;
+  --focus: #0043CE;
+
+  /* === Legacy site vars (for existing dark-theme components) === */
+  --bg: #0a0a0a;
+  --text: #f0f0f0;
+  --gray: #666;
+  --border: #333;
+  --brand: #2A7AE4;
+  --muted: #333;
+  /* Code surface + text — adapt to theme */
+  --code-bg: #e8e8e8;
+  --code-text: #161616;
+  --code-text-muted: #525252;
+  --code-border: rgba(0, 0, 0, 0.1);
+
+  /* === Mini-app vars (dark — do not change) === */
+  --app-bg: #000000;
+  --app-surface: #0a0a0a;
+  --app-border: rgba(255, 255, 255, 0.12);
+  --app-border-focus: rgba(255, 255, 255, 0.25);
+  --app-text: rgba(255, 255, 255, 0.9);
+  --app-text-muted: rgba(255, 255, 255, 0.55);
+  --app-text-placeholder: rgba(255, 255, 255, 0.35);
+  --app-input-bg: rgba(255, 255, 255, 0.04);
+  --app-input-bg-hover: rgba(255, 255, 255, 0.06);
+  --app-btn-bg: rgba(255, 255, 255, 0.1);
+  --app-btn-bg-hover: rgba(255, 255, 255, 0.18);
+  --app-btn-disabled: rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="light"] {
+  --bg: #fafafa;
+  --text: #0a0a0a;
+  --gray: #555;
+  --border: #ddd;
+  --brand: #1a6bd4;
+  --muted: #ccc;
+  --code-bg: #e8e8e8;
+  --code-text: #161616;
+  --code-text-muted: #525252;
+  --code-border: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --background: #161616;
+  --layer-01: #161616;
+  --layer-02: #262626;
+  --border-subtle: #393939;
+  --border-strong: #6f6f6f;
+  --text-primary: #f4f4f4;
+  --text-secondary: #c6c6c6;
+  --text-muted: #6f6f6f;
+  --code-bg: #161616;
+  --code-text: rgba(255, 255, 255, 0.9);
+  --code-text-muted: rgba(255, 255, 255, 0.55);
+  --code-border: rgba(255, 255, 255, 0.12);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::placeholder {
+  color: var(--app-text-placeholder);
+}
+
+.state-circle.on {
+  @apply bg-white/90;
+}
+
+/* Pedal body gradients */
+.pedal-crimson .pedal-body {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.03) 1px, rgba(255, 255, 255, 0.03) 2px),
+    linear-gradient(180deg, #ff0056 0%, #b30045 52%, #680024 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(255, 0, 86, 0.35);
+}
+
+.pedal-emerald .pedal-body {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.03) 1px, rgba(255, 255, 255, 0.03) 2px),
+    linear-gradient(180deg, #1e00ff 0%, #1800b8 52%, #11007a 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(30, 0, 255, 0.35);
+}
+
+.pedal-cobalt .pedal-body {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.03) 1px, rgba(255, 255, 255, 0.03) 2px),
+    linear-gradient(180deg, #8206ff 0%, #5b05b6 52%, #380374 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(130, 6, 255, 0.35);
+}
+
+.pedal-amber .pedal-body {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.03) 1px, rgba(255, 255, 255, 0.03) 2px),
+    linear-gradient(180deg, #0061ff 0%, #0047bd 52%, #00307d 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(0, 97, 255, 0.35);
+}
+
+.pedal-violet .pedal-body {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.03) 1px, rgba(255, 255, 255, 0.03) 2px),
+    linear-gradient(180deg, #00ff5a 0%, #00b840 52%, #00772a 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(0, 255, 90, 0.35);
+}
+
+.pedal-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 3px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.2) 70%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}

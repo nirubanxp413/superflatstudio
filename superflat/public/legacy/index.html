@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIRUBAN — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --text: #f0f0f0;
+    --gray: #666;
+    --border: #333;
+    --brand: #2A7AE4;
+    --muted: #333;
+  }
+
+  [data-theme="light"] {
+    --bg: #fafafa;
+    --text: #0a0a0a;
+    --gray: #555;
+    --border: #ddd;
+    --brand: #1a6bd4;
+    --muted: #ccc;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    cursor: crosshair;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .page {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 100vh;
+  }
+
+  /* LEFT */
+  .carousel-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .carousel-stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  .card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    will-change: transform, opacity;
+    pointer-events: none;
+    transition: background 0.25s, border-color 0.25s;
+  }
+
+  .card::before {
+    content: attr(data-number);
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gray);
+    font-family: 'IBM Plex Mono', monospace;
+    transition: color 0.25s;
+  }
+
+  .card-inner {
+    padding: 22px 24px;
+  }
+
+  .card-category {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 6px;
+    transition: color 0.25s;
+  }
+
+  .card-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text);
+    transition: color 0.25s;
+  }
+
+  .card-line {
+    width: 32px;
+    height: 1px;
+    background: var(--text);
+    margin-top: 12px;
+    transition: background 0.25s;
+  }
+
+  .card.active {
+    background: var(--text);
+    border-color: var(--text);
+  }
+
+  .card.active .card-title { color: var(--bg); }
+  .card.active .card-category { color: #555; }
+  .card.active .card-line { background: var(--bg); }
+  .card.active::before { color: #999; }
+
+  /* RIGHT */
+  .info-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 64px;
+    position: relative;
+  }
+
+  .header-tag {
+    position: absolute;
+    top: 40px;
+    left: 64px;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 64px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .scroll-hint .arrow {
+    display: inline-block;
+    animation: bounce 1.8s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+
+  .project-number {
+    font-size: 100px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--muted);
+    margin-bottom: 16px;
+    user-select: none;
+  }
+
+  .project-category {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+
+  .project-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    max-width: 440px;
+  }
+
+  .project-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--gray);
+    max-width: 360px;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: var(--text);
+    margin: 28px 0;
+  }
+
+  .project-cta {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--text);
+    padding-bottom: 2px;
+    display: inline-block;
+    transition: padding-bottom 0.3s ease;
+    cursor: pointer;
+  }
+
+  .project-cta:hover { padding-bottom: 6px; }
+
+  .info-content {
+    transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .info-content.out {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  /* NAV */
+  .nav-corner {
+    position: fixed;
+    top: 36px;
+    right: 50px;
+    display: flex;
+    gap: 30px;
+    z-index: 100;
+  }
+
+  .nav-corner a {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-corner a:hover { color: var(--brand); }
+
+  .theme-toggle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+  }
+  .theme-toggle:hover { color: var(--brand); }
+
+  .logo {
+    position: fixed;
+    top: 34px;
+    left: 40px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    z-index: 100;
+  }
+
+  .logo a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .counter {
+    position: fixed;
+    bottom: 40px;
+    right: 50px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gray);
+    z-index: 100;
+  }
+
+  .counter .current-num { color: var(--brand); font-size: 13px; }
+
+  .progress-track {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 180px;
+    background: var(--border);
+    z-index: 100;
+  }
+
+  .progress-fill {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: var(--brand);
+    transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+  }
+</style>
+</head>
+<body>
+
+<div class="logo"><a href="index.html">N.</a></div>
+
+<nav class="nav-corner">
+  <a href="index.html">Work</a>
+  <a href="#">About</a>
+  <a href="#">Contact</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">Light</button>
+</nav>
+
+<div class="page">
+  <div class="carousel-section">
+    <div class="carousel-stage" id="stage"></div>
+  </div>
+
+  <div class="info-section">
+    <div class="header-tag">Selected Works</div>
+    <div class="info-content" id="infoContent">
+      <div class="project-number" id="projNum">01</div>
+      <div class="project-category" id="projCat">—</div>
+      <div class="project-title" id="projTitle">—</div>
+      <div class="project-desc" id="projDesc">—</div>
+      <div class="divider"></div>
+      <a id="projectCta" class="project-cta" href="#">View Project →</a>
+    </div>
+    <div class="scroll-hint">
+      <span class="arrow">↓</span> Scroll to explore
+    </div>
+  </div>
+</div>
+
+<div class="counter">
+  <span class="current-num" id="counterCurrent">01</span> / <span id="counterTotal">00</span>
+</div>
+
+<div class="progress-track">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<script>
+const SANITY_PROJECT_ID = 'jihmnp1s';
+const SANITY_DATASET = 'production';
+const SANITY_API = `https://${SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/query/${SANITY_DATASET}`;
+
+// Fallback projects when Sanity is empty or fails
+const FALLBACK_PROJECTS = [
+  { title: "King's Command", category: "GAME DESIGN", desc: "A turn-based tactics game where players command autonomous AI soldiers through natural language orders.", slug: "kings-command" },
+  { title: "Tone Modulator", category: "CREATIVE TOOL", desc: "A guitar pedal-style interface for LLM tone transformation — modular synthesizer meets prompt engineering.", slug: "tone-modulator" },
+  { title: "Tamil Glyphs", category: "GENERATIVE ART", desc: "Parametric explorations of Tamil script through computational design and procedural typography.", slug: "tamil-glyphs" },
+  { title: "RedOwl Platform", category: "PRODUCT DESIGN", desc: "An agentic AI platform for working capital management — from deterministic tools to intelligent automation.", slug: "redowl-platform" },
+  { title: "Signal Chain", category: "INTERACTIVE", desc: "A visual programming environment for chaining LLM transformations like audio signal processors.", slug: "signal-chain" },
+  { title: "Invoice Engine", category: "SYSTEMS DESIGN", desc: "Automated document processing workflows with customizable visual styling and intelligent extraction.", slug: "invoice-engine" },
+  { title: "Cortez Deck", category: "STRATEGY", desc: "Strategic narrative design for an AI-first architectural pivot — the point of no return.", slug: "cortez-deck" },
+  { title: "Data Currents", category: "DATA VIZ", desc: "Financial data streams visualized as living topographies — where numbers become landscapes.", slug: "data-currents" },
+];
+
+let projects = [];
+
+async function fetchProjects() {
+  const query = encodeURIComponent('*[_type == "project"] | order(_createdAt asc) { title, "slug": slug.current, category, description }');
+  try {
+    const res = await fetch(`${SANITY_API}?query=${query}`);
+    const data = await res.json();
+    if (data.result && data.result.length > 0) {
+      return data.result.map((p, i) => ({
+        title: p.title,
+        category: (p.category || '').toUpperCase(),
+        desc: p.description || '',
+        slug: p.slug || `project-${i + 1}`,
+      }));
+    }
+  } catch (e) {
+    console.warn('Sanity fetch failed, using fallback:', e);
+  }
+  return FALLBACK_PROJECTS;
+}
+
+const NUM_VISIBLE = 21;
+const HALF = Math.floor(NUM_VISIBLE / 2);
+
+let cardRotations = [];
+let cardXOffsets = [];
+
+function initCardOffsets(total) {
+  cardRotations = [];
+  cardXOffsets = [];
+  for (let i = 0; i < total; i++) {
+    const seedR = Math.sin(i * 137.508 + 42) * 10000;
+    const magnitude = 10 + (seedR - Math.floor(seedR)) * 20;
+    const sign = Math.sin(i * 53.1 + 7) > 0 ? 1 : -1;
+    cardRotations.push(magnitude * sign);
+    const seedX = Math.sin(i * 251.73 + 97) * 10000;
+    cardXOffsets.push((seedX - Math.floor(seedX)) * 300 - 150);
+  }
+}
+
+let position = 0;
+let velocity = 0;
+let lastActiveIdx = 0;
+
+const FRICTION = 0.82;
+const SCROLL_MULT = 0.0003;
+const SNAP_PULL = 0.08;
+const VELOCITY_DEAD = 0.0008;
+const SETTLE_DEAD = 0.003;
+
+let CARD_BASE;
+let STAGE_H;
+
+function measureSizes() {
+  STAGE_H = window.innerHeight;
+  CARD_BASE = Math.min(STAGE_H * 0.4, window.innerWidth * 0.5 * 0.7);
+}
+measureSizes();
+window.addEventListener('resize', () => {
+  measureSizes();
+  if (projects.length) renderCards(position);
+});
+
+const stage = document.getElementById('stage');
+const infoContent = document.getElementById('infoContent');
+const projNum = document.getElementById('projNum');
+const projCat = document.getElementById('projCat');
+const projTitle = document.getElementById('projTitle');
+const projDesc = document.getElementById('projDesc');
+const counterCurrent = document.getElementById('counterCurrent');
+const progressFill = document.getElementById('progressFill');
+const projectCta = document.getElementById('projectCta');
+const counterTotal = document.getElementById('counterTotal');
+
+const cards = [];
+
+function buildCards() {
+  stage.innerHTML = '';
+  cards.length = 0;
+  for (let i = 0; i < NUM_VISIBLE; i++) {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = '<div class="card-inner"><div class="card-category"></div><div class="card-title"></div><div class="card-line"></div></div>';
+    stage.appendChild(el);
+    cards.push(el);
+  }
+}
+
+function mod(n, m) { return ((n % m) + m) % m; }
+
+function renderCards(pos) {
+  const TOTAL = projects.length;
+  if (TOTAL === 0) return;
+
+  const roundedCenter = Math.round(pos);
+  const fractional = pos - roundedCenter;
+
+  for (let i = 0; i < NUM_VISIBLE; i++) {
+    const slotOffset = i - HALF;
+    const continuousOffset = slotOffset - fractional;
+    const absOff = Math.abs(continuousOffset);
+
+    const projIdx = mod(roundedCenter + slotOffset, TOTAL);
+    const proj = projects[projIdx];
+    const card = cards[i];
+
+    card.setAttribute('data-number', absOff < 6 ? String(projIdx + 1).padStart(2, '0') : '');
+    card.querySelector('.card-category').textContent = proj.category || '';
+    card.querySelector('.card-title').textContent = proj.title || '';
+
+    const scale = Math.max(0.25, 1 - absOff * 0.1);
+    const size = CARD_BASE * scale;
+
+    const gap = 8;
+    const stepSize = size * 0.52 + gap;
+    const y = continuousOffset * stepSize;
+
+    const baseRot = cardRotations[projIdx] || 0;
+    const rotEase = Math.min(1, absOff * 0.4);
+    const rotation = baseRot * rotEase;
+
+    const baseX = cardXOffsets[projIdx] || 0;
+    const xEase = Math.min(1, absOff * 0.4);
+    const xOff = baseX * xEase;
+
+    const opacity = Math.max(0, 1 - absOff * 0.12);
+    const zIdx = 300 - Math.round(absOff * 10);
+
+    card.style.width = size + 'px';
+    card.style.height = size + 'px';
+    card.style.transform = `translate(-50%, -50%) translate(${xOff}px, ${y}px) rotate(${rotation}deg)`;
+    card.style.opacity = opacity;
+    card.style.zIndex = zIdx;
+
+    card.classList.toggle('active', absOff < 0.45);
+  }
+}
+
+function updateInfoPanel(idx) {
+  if (idx === lastActiveIdx) return;
+  lastActiveIdx = idx;
+
+  const proj = projects[idx];
+  infoContent.classList.add('out');
+
+  setTimeout(() => {
+    const TOTAL = projects.length;
+    projNum.textContent = String(idx + 1).padStart(2, '0');
+    projCat.textContent = proj.category || '';
+    projTitle.textContent = proj.title || '';
+    projDesc.textContent = proj.desc || '';
+    counterCurrent.textContent = String(idx + 1).padStart(2, '0');
+    progressFill.style.height = ((idx + 1) / TOTAL * 100) + '%';
+    projectCta.href = `project.html?slug=${encodeURIComponent(proj.slug || '')}`;
+    projectCta.textContent = 'View Project →';
+    infoContent.classList.remove('out');
+  }, 160);
+}
+
+function tick() {
+  const TOTAL = projects.length;
+  if (TOTAL === 0) {
+    requestAnimationFrame(tick);
+    return;
+  }
+
+  velocity *= FRICTION;
+
+  if (Math.abs(velocity) < VELOCITY_DEAD) {
+    const nearest = Math.round(position);
+    const diff = nearest - position;
+    if (Math.abs(diff) < SETTLE_DEAD) {
+      position = nearest;
+      velocity = 0;
+    } else {
+      position += diff * SNAP_PULL;
+    }
+  }
+
+  position += velocity;
+  renderCards(position);
+
+  const activeIdx = mod(Math.round(position), TOTAL);
+  updateInfoPanel(activeIdx);
+
+  requestAnimationFrame(tick);
+}
+
+window.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  velocity += e.deltaY * SCROLL_MULT;
+  velocity = Math.max(-0.4, Math.min(0.4, velocity));
+}, { passive: false });
+
+let touchY = 0;
+window.addEventListener('touchstart', (e) => {
+  touchY = e.touches[0].clientY;
+  velocity = 0;
+});
+window.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const y = e.touches[0].clientY;
+  velocity = (touchY - y) * 0.004;
+  touchY = y;
+}, { passive: false });
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') velocity += 0.1;
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') velocity -= 0.1;
+});
+
+async function init() {
+  buildCards();
+  projects = await fetchProjects();
+  const TOTAL = projects.length;
+
+  if (TOTAL === 0) {
+    document.querySelector('.info-content').innerHTML = '<p class="project-desc">No projects yet. Add some in Sanity Studio.</p>';
+    return;
+  }
+
+  initCardOffsets(TOTAL);
+  counterTotal.textContent = String(TOTAL).padStart(2, '0');
+  renderCards(0);
+  updateInfoPanel(0);
+  progressFill.style.height = (1 / TOTAL * 100) + '%';
+  requestAnimationFrame(tick);
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? '' : 'light');
+  document.getElementById('themeToggle').textContent = theme === 'dark' ? 'Light' : 'Dark';
+}
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  document.documentElement.setAttribute('data-theme', isLight ? '' : 'light');
+  localStorage.setItem('theme', isLight ? 'dark' : 'light');
+  document.getElementById('themeToggle').textContent = isLight ? 'Light' : 'Dark';
+});
+
+initTheme();
+init();
+</script>
+
+</body>
+</html>

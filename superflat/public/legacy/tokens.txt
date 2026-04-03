@@ -1,0 +1,68 @@
+/* Superflat Studio — Design Tokens */
+
+/* Fonts (add to <head>) */
+/* <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"> */
+
+:root {
+  /* Dark theme (default) */
+  --bg: #0a0a0a;
+  --text: #f0f0f0;
+  --gray: #666;
+  --border: #333;
+  --brand: #2A7AE4;
+  --muted: #333;
+  --code-bg: #111;
+}
+
+[data-theme="light"] {
+  --bg: #fafafa;
+  --text: #0a0a0a;
+  --gray: #555;
+  --border: #ddd;
+  --brand: #1a6bd4;
+  --muted: #ccc;
+  --code-bg: #f0f0f0;
+}
+
+/* Token reference
+   | Token      | Dark     | Light    | Use
+   |------------|----------|----------|---------------------------
+   | --bg       | #0a0a0a  | #fafafa  | Page background
+   | --text     | #f0f0f0  | #0a0a0a  | Primary text
+   | --gray     | #666     | #555     | Secondary text, labels
+   | --border   | #333     | #ddd     | Borders, dividers
+   | --brand    | #2A7AE4  | #1a6bd4  | Accents, links, highlights
+   | --muted    | #333     | #ccc     | Decorative elements
+   | --code-bg  | #111     | #f0f0f0  | Code block background
+*/
+
+/* Typography
+   - IBM Plex Sans: headings, body
+   - IBM Plex Mono: labels, code, small caps
+*/
+
+/* Theme toggle (JS)
+function initTheme() {
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? '' : 'light');
+}
+
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  document.documentElement.setAttribute('data-theme', isLight ? '' : 'light');
+  localStorage.setItem('theme', isLight ? 'dark' : 'light');
+}
+*/
+
+/* Optional texture overlay
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+*/
