@@ -30,3 +30,14 @@
 
 # Nested git worktrees (avoid submodule/gitlink issues)
 ToVModulator/.claude/worktrees/
+
+# Archive (old projects, not deployed)
+/archive/
+
+# Docs (local reference only)
+/docs/
+
+# Tool config folders (local only, not part of the repo)
+/.claude/
+/.cursor/
+/.vscode/

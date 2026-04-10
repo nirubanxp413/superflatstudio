@@ -38,29 +38,31 @@ function BlockWrapper({
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function renderBlock(block: Block): React.ReactNode {
-  switch (block._type) {
+  // Runtime block shapes come from Sanity; components own their prop types.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const b: any = block
+  switch (b._type) {
     case 'heroImage':
-      return <HeroImage block={block as Parameters<typeof HeroImage>[0]['block']} />
+      return <HeroImage block={b} />
     case 'heroCodeSketch':
-      return <HeroCodeSketch block={block as Parameters<typeof HeroCodeSketch>[0]['block']} />
+      return <HeroCodeSketch block={b} />
     case 'pageHeader':
-      return <PageHeader block={block as Parameters<typeof PageHeader>[0]['block']} />
+      return <PageHeader block={b} />
     case 'titleBlock':
-      return <BlockTitle block={block as Parameters<typeof BlockTitle>[0]['block']} />
+      return <BlockTitle block={b} />
     case 'thinkingGallery':
-      return <ThinkingGallery block={block as Parameters<typeof ThinkingGallery>[0]['block']} />
+      return <ThinkingGallery block={b} />
     case 'thinking':
-      return <Thinking block={block as Parameters<typeof Thinking>[0]['block']} />
+      return <Thinking block={b} />
     case 'artefact':
-      return <Artefact block={block as Parameters<typeof Artefact>[0]['block']} />
+      return <Artefact block={b} />
     case 'codeCanvas':
-      return <CodeCanvas block={block as Parameters<typeof CodeCanvas>[0]['block']} />
+      return <CodeCanvas block={b} />
     case 'textBlock':
-      return <TextBlock block={block as Parameters<typeof TextBlock>[0]['block']} />
+      return <TextBlock block={b} />
     case 'imageBlock':
-      return <ImageBlock block={block as Parameters<typeof ImageBlock>[0]['block']} />
+      return <ImageBlock block={b} />
     default:
       return null
   }

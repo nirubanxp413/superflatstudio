@@ -4,9 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   CAROUSEL,
   POC_PROJECTS,
-  POC_SKETCH_DESCRIPTION,
-  POC_SKETCHES,
-  POC_THOUGHTS,
   SKETCHES_SCENE_ENTRY_MS,
   SKETCHES_SCENE_EXIT_MS,
   easeOutQuart,
@@ -18,12 +15,39 @@ import {
   type HomePage,
   type ProjectsSceneRef,
 } from './homeExperienceLib'
+import { formatPublishedDate } from '@/lib/formatPublishedDate'
 import './homeExperience.css'
 import { ThoughtListItem } from './ThoughtListItem'
+import { buttonVariantClasses } from '@/components/button'
 import {
   useHeroNavTransition,
   type HeroNavTransitionDeps,
 } from './useHeroNavTransition'
+
+/**
+ * Launch toggle: hide Work/Projects nav while there are no published project docs.
+ * Flip to `true` to show both buttons again.
+ */
+const SHOW_PROJECTS_NAV = false
+
+type HomeSketch = {
+  _id: string
+  title: string
+  slug?: string
+  shortDescription: string
+  canvasHtml: string
+  engine?: string
+  publishedAt?: string
+}
+
+type HomeThought = {
+  _id: string
+  title: string
+  slug?: string
+  shortDescription: string
+  coverImageUrl?: string
+  publishedAt?: string
+}
 
 function navLinkClass(active: boolean) {
   const base =
@@ -32,7 +56,13 @@ function navLinkClass(active: boolean) {
   return `${base} text-[var(--muted)] hover:text-[var(--gray)]`
 }
 
-export function HomeExperience() {
+export function HomeExperience({
+  sketches,
+  thoughts,
+}: {
+  sketches: HomeSketch[]
+  thoughts: HomeThought[]
+}) {
   const activePageRef = useRef<HomePage>('home')
   const [thoughtMode, setThoughtMode] = useState(false)
   const [carouselBleed, setCarouselBleed] = useState(false)
@@ -43,6 +73,23 @@ export function HomeExperience() {
     visible: boolean
   }>({ src: '', x: 0, y: 0, visible: false })
 
+  const sketchItems = useMemo(() => {
+    if (sketches.length > 0) return sketches
+    return [
+      {
+        _id: 'fallback-sketch',
+        title: 'No sketches published yet',
+        shortDescription: 'Publish a sketch in Sanity to preview it here.',
+        canvasHtml:
+          '<!doctype html><html><body style="margin:0;background:#0f172a;color:#e2e8f0;display:grid;place-items:center;height:100vh;font-family:IBM Plex Sans,sans-serif;">No sketch HTML published yet.</body></html>',
+      },
+    ]
+  }, [sketches])
+
+  const thoughtItems = useMemo(() => {
+    return thoughts.filter((item) => Boolean(item.slug))
+  }, [thoughts])
+
   const mainScrollViewportRef = useRef<HTMLDivElement>(null)
   const appShellRef = useRef<HTMLElement>(null)
   const contentRowRef = useRef<HTMLDivElement>(null)
@@ -52,7 +99,6 @@ export function HomeExperience() {
   const disposeProjectsCarouselRef = useRef<(() => void) | null>(null)
   const projectsSceneRef = useRef<ProjectsSceneRef | null>(null)
   const sketchesSceneWrapperRef = useRef<HTMLElement | null>(null)
-  const sketchTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const updateMainViewportHeight = useCallback(() => {
     const vp = mainScrollViewportRef.current
@@ -71,10 +117,6 @@ export function HomeExperience() {
   }, [updateMainViewportHeight])
 
   const clearHeroScene = useCallback(() => {
-    if (sketchTimerRef.current) {
-      clearInterval(sketchTimerRef.current)
-      sketchTimerRef.current = null
-    }
     disposeProjectsCarouselRef.current?.()
     disposeProjectsCarouselRef.current = null
     projectsSceneRef.current = null
@@ -688,57 +730,103 @@ export function HomeExperience() {
     const contentRow = contentRowRef.current
     if (!contentRow) return Promise.resolve()
 
+    const sketchesPaginationNavClass = [
+      buttonVariantClasses.borderless,
+      'min-w-[32px] h-8 shrink-0 px-2 py-0 text-lg font-medium leading-none',
+      'text-white/90 hover:text-white hover:!bg-white/12 active:!bg-white/18',
+    ].join(' ')
+
     const wrapper = document.createElement('section')
     wrapper.className = 'sketches-wrapper'
-    const dots = Array.from({ length: 7 })
-      .map((_, index) => `<span class="sketches-dot ${index === 0 ? 'active' : ''}"></span>`)
-      .join('')
+    const dots = sketchItems.map(
+      (item, index) =>
+        `<button type="button" class="sketches-dot ${index === 0 ? 'active' : ''}" data-sketch-index="${index}" aria-label="${escapeHtml(item.title)}" aria-current="${index === 0 ? 'true' : 'false'}"></button>`
+    ).join('')
 
     wrapper.innerHTML = `
     <div class="sketches-frame" id="sketchesFrame">
       <div class="sketch-stage">
-        <div class="sketch-noise"></div>
-        <div id="sketchTitle">${POC_SKETCHES[0]}</div>
+        <iframe title="${escapeHtml(sketchItems[0].title)}" class="sketch-canvas-frame" loading="eager"></iframe>
       </div>
     </div>
     <div class="sketches-right">
       <div class="sketches-descriptor">
         <div class="sketches-meta" id="sketchesMeta">
-          <div class="sketches-title">${POC_SKETCHES[0]}</div>
-          <div class="sketches-desc">${escapeHtml(POC_SKETCH_DESCRIPTION)}</div>
+          <div class="sketches-title">${escapeHtml(sketchItems[0].title)}</div>
+          <div class="sketches-desc">${escapeHtml(sketchItems[0].shortDescription)}</div>
         </div>
       </div>
-      <div class="sketches-indicators">${dots}</div>
+      <div class="sketches-pagination" role="group" aria-label="Sketch carousel">
+        <button type="button" class="${sketchesPaginationNavClass} sketches-pagination-prev" aria-label="Previous sketch">‹</button>
+        <div class="sketches-indicators">${dots}</div>
+        <button type="button" class="${sketchesPaginationNavClass} sketches-pagination-next" aria-label="Next sketch">›</button>
+      </div>
     </div>
   `
     contentRow.appendChild(wrapper)
     wrapper.classList.add('sketches-scene-enter')
     sketchesSceneWrapperRef.current = wrapper
 
-    const titleEl = wrapper.querySelector('#sketchTitle')
+    const frameEl = wrapper.querySelector('.sketch-canvas-frame') as HTMLIFrameElement
     const metaTitleEl = wrapper.querySelector('.sketches-title')
-    const dotsEls = Array.from(wrapper.querySelectorAll('.sketches-dot'))
+    const metaDescEl = wrapper.querySelector('.sketches-desc')
+    const dotEls = Array.from(
+      wrapper.querySelectorAll('.sketches-dot')
+    ) as HTMLButtonElement[]
+    const prevBtn = wrapper.querySelector(
+      '.sketches-pagination-prev'
+    ) as HTMLButtonElement
+    const nextBtn = wrapper.querySelector(
+      '.sketches-pagination-next'
+    ) as HTMLButtonElement
+
+    let index = 0
+
+    const applySketchIndex = (nextIndex: number) => {
+      index = mod(nextIndex, sketchItems.length)
+      const item = sketchItems[index]
+      if (metaTitleEl) metaTitleEl.textContent = item.title
+      if (metaDescEl) metaDescEl.textContent = item.shortDescription
+      frameEl.title = item.title
+      frameEl.setAttribute('sandbox', 'allow-scripts allow-same-origin')
+      frameEl.srcdoc = item.canvasHtml
+      dotEls.forEach((dot, dotIndex) => {
+        const on = dotIndex === index
+        dot.classList.toggle('active', on)
+        dot.setAttribute('aria-current', on ? 'true' : 'false')
+      })
+    }
+
+    applySketchIndex(0)
+
+    const onPrev = () => {
+      applySketchIndex(index - 1)
+    }
+    const onNext = () => {
+      applySketchIndex(index + 1)
+    }
+
+    prevBtn.addEventListener('click', onPrev)
+    nextBtn.addEventListener('click', onNext)
+    dotEls.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const raw = dot.dataset.sketchIndex
+        const i = raw != null ? Number.parseInt(raw, 10) : NaN
+        if (Number.isNaN(i)) return
+        applySketchIndex(i)
+      })
+    })
 
     return new Promise<void>((resolve) => {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           window.setTimeout(() => {
-            let index = 0
-            sketchTimerRef.current = setInterval(() => {
-              index = (index + 1) % POC_SKETCHES.length
-              const label = POC_SKETCHES[index]
-              if (titleEl) titleEl.textContent = label
-              if (metaTitleEl) metaTitleEl.textContent = label
-              dotsEls.forEach((dot, dotIndex) => {
-                dot.classList.toggle('active', dotIndex === index % dotsEls.length)
-              })
-            }, 1700)
             resolve()
           }, SKETCHES_SCENE_ENTRY_MS)
         })
       })
     })
-  }, [])
+  }, [sketchItems])
 
   const transitionDeps = useMemo<HeroNavTransitionDeps>(
     () => ({
@@ -776,12 +864,25 @@ export function HomeExperience() {
     updateMainViewportHeight()
     window.addEventListener('resize', updateMainViewportHeight)
     void requestNavigate('home')
+
+    if (window.location.hash === '#thought') {
+      setThoughtMode(true)
+      if (mainScrollViewportRef.current) {
+        mainScrollViewportRef.current.scrollTop = 0
+      }
+      window.history.replaceState(null, '', window.location.pathname)
+    }
+
     return () => {
       window.removeEventListener('resize', updateMainViewportHeight)
       clearHeroScene()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount / unmount only
   }, [])
+
+  useEffect(() => {
+    updateMainViewportHeight()
+  }, [thoughtMode, updateMainViewportHeight])
 
   const onThoughtEnter = useCallback((image: string) => {
     const stage = thoughtsListRef.current
@@ -808,7 +909,7 @@ export function HomeExperience() {
           <div className="vertical-strip">
             <div className="strip-hero">
               <div
-                className={`hero-container${carouselBleed ? ' hero-container--projects-bleed' : ''}`}
+                className={`hero-container${carouselBleed ? ' hero-container--projects-bleed' : ''}${navPage === 'sketches' ? ' hero-container--sketches' : ''}`}
               >
                 <div className="content">
                   <div className="header-row">
@@ -832,14 +933,14 @@ export function HomeExperience() {
             >
               <div ref={thoughtsListRef} className="thoughts-list">
                 {thoughtMode &&
-                  POC_THOUGHTS.map((item, index) => {
-                    const n = String(index + 1).padStart(2, '0')
+                  thoughtItems.map((item) => {
                     return (
                       <ThoughtListItem
-                        key={item.title}
+                        key={item._id}
                         title={item.title}
-                        count={n}
-                        image={item.image}
+                        meta={formatPublishedDate(item.publishedAt)}
+                        href={item.slug ? `/thought/${item.slug}` : undefined}
+                        image={item.coverImageUrl ?? ''}
                         onThoughtEnter={onThoughtEnter}
                         onThoughtLeave={onThoughtLeave}
                       />
@@ -873,20 +974,24 @@ export function HomeExperience() {
             >
               Thought
             </button>
-            <button
-              type="button"
-              className={navLinkClass(!thoughtMode && navPage === 'home')}
-              onClick={() => void requestNavigate('home')}
-            >
-              Work
-            </button>
-            <button
-              type="button"
-              className={navLinkClass(!thoughtMode && navPage === 'projects')}
-              onClick={() => void requestNavigate('projects')}
-            >
-              Projects
-            </button>
+            {SHOW_PROJECTS_NAV ? (
+              <button
+                type="button"
+                className={navLinkClass(!thoughtMode && navPage === 'home')}
+                onClick={() => void requestNavigate('home')}
+              >
+                Work
+              </button>
+            ) : null}
+            {SHOW_PROJECTS_NAV ? (
+              <button
+                type="button"
+                className={navLinkClass(!thoughtMode && navPage === 'projects')}
+                onClick={() => void requestNavigate('projects')}
+              >
+                Projects
+              </button>
+            ) : null}
             <button
               type="button"
               className={navLinkClass(!thoughtMode && navPage === 'sketches')}

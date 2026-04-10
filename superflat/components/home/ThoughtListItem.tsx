@@ -6,21 +6,26 @@ import {
   useRef,
   useState,
 } from 'react'
+import Link from 'next/link'
 import { easeOutQuart } from './homeExperienceLib'
 
 const HOVER_MS = 300
 
 type ThoughtListItemProps = {
   title: string
-  count: string
+  /** Right column — index (e.g. 01) or formatted date */
+  meta: string
   image: string
+  /** When set, the row navigates to this href (e.g. /thought/slug) */
+  href?: string
   onThoughtEnter: (image: string) => void
   onThoughtLeave: () => void
 }
 
 export function ThoughtListItem({
   title,
-  count,
+  meta,
+  href,
   image,
   onThoughtEnter,
   onThoughtLeave,
@@ -70,18 +75,22 @@ export function ThoughtListItem({
   const p = progressRef.current
   const stopPct = `${p * 100}%`
 
-  return (
-    <div
-      className="thought-item"
-      onMouseEnter={() => {
-        onThoughtEnter(image)
-        animateTo(1)
-      }}
-      onMouseLeave={() => {
-        onThoughtLeave()
-        animateTo(0)
-      }}
-    >
+  const shellProps = {
+    className: href
+      ? 'thought-item block no-underline text-inherit cursor-pointer'
+      : 'thought-item',
+    onMouseEnter: () => {
+      if (image) onThoughtEnter(image)
+      animateTo(1)
+    },
+    onMouseLeave: () => {
+      onThoughtLeave()
+      animateTo(0)
+    },
+  }
+
+  const inner = (
+    <>
       <div
         className="thought-item-bg"
         style={{ width: stopPct }}
@@ -94,8 +103,18 @@ export function ThoughtListItem({
         }}
       >
         <span>{title}</span>
-        <span className="thought-item-count">{count}</span>
+        <span className="thought-item-count">{meta}</span>
       </div>
-    </div>
+    </>
   )
+
+  if (href) {
+    return (
+      <Link href={href} {...shellProps}>
+        {inner}
+      </Link>
+    )
+  }
+
+  return <div {...shellProps}>{inner}</div>
 }

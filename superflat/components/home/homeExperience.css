@@ -70,8 +70,13 @@
     flex: 1;
     min-height: 0;
     border-radius: 10px;
-    background: var(--blue);
+    background-color: var(--blue);
+    transition: background-color 0.8s cubic-bezier(0.33, 0.04, 0.2, 1);
     overflow: hidden;
+  }
+
+  .hero-container.hero-container--sketches {
+    background-color: var(--layer-02);
   }
 
   /* Projects 3D flow extends past the inner padding; allow sides to paint past the blue edge */
@@ -84,8 +89,7 @@
     inset: 0;
     display: flex;
     flex-direction: column;
-    /* Top + horizontal inset; no bottom padding — projects carousel uses translateY + hero clips */
-    padding: var(--hero-padding-y) var(--hero-padding-x) 0;
+    padding: var(--hero-padding-y) var(--hero-padding-x) var(--hero-padding-x);
     row-gap: 20px;
   }
   
@@ -105,7 +109,7 @@
     margin: 0;
     padding: 0;
   }
-  
+
   /* Projects: deck may paint past this row; span full blue hero width (cancel .content horizontal padding) */
   .content-row.content-row--carousel-bleed {
     overflow: visible;
@@ -211,6 +215,10 @@
     line-height: 1.15;
     text-transform: uppercase;
     color: var(--white);
+  }
+
+  .hero-container.hero-container--sketches .hero-tagline {
+    color: var(--text-primary);
   }
   
   /* Penpot Projects: row = left flex text + center carousel; content-row clips overflow */
@@ -390,7 +398,6 @@
   .sketches-wrapper {
     width: 100%;
     height: 100%;
-    padding-bottom: var(--hero-padding-x);
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -446,23 +453,50 @@
     row-gap: 0;
   }
   
+  .sketches-pagination {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
   .sketches-indicators {
-    width: 167px;
-    height: 14px;
     display: flex;
     align-items: center;
-    gap: 11px;
+    justify-content: center;
+    gap: 10px;
+    flex: 0 1 auto;
+    min-height: 14px;
   }
   
   .sketches-dot {
-    width: 14px;
-    height: 14px;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    margin: 0;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     background: transparent;
+    cursor: pointer;
+    transition:
+      width 0.2s cubic-bezier(0.165, 0.84, 0.44, 1),
+      height 0.2s cubic-bezier(0.165, 0.84, 0.44, 1),
+      border-color 0.2s cubic-bezier(0.165, 0.84, 0.44, 1),
+      background-color 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .sketches-dot:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
   }
   
   .sketches-dot.active {
+    width: 14px;
+    height: 14px;
     background: #ffffff;
     border-color: #ffffff;
   }
@@ -470,10 +504,15 @@
   .sketch-stage {
     position: absolute;
     inset: 0;
-    display: grid;
-    place-items: center;
-    color: #1f1f1f;
-    font-family: "IBM Plex Mono", monospace;
+    overflow: hidden;
+  }
+
+  .sketch-canvas-frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #0b0f14;
   }
   
   .sketch-noise {
@@ -507,6 +546,31 @@
     line-height: 1.2;
     font-weight: 400;
     white-space: pre-line;
+  }
+
+  .hero-container.hero-container--sketches .sketches-meta {
+    color: var(--text-primary);
+  }
+
+  .hero-container.hero-container--sketches .sketches-desc {
+    color: var(--text-secondary);
+  }
+
+  .hero-container.hero-container--sketches .sketches-dot {
+    border-color: rgba(22, 22, 22, 0.45);
+  }
+
+  .hero-container.hero-container--sketches .sketches-dot.active {
+    background: #161616;
+    border-color: #161616;
+  }
+
+  .hero-container.hero-container--sketches .sketches-pagination button {
+    color: rgba(22, 22, 22, 0.85) !important;
+  }
+
+  .hero-container.hero-container--sketches .sketches-pagination button:hover {
+    background: rgba(22, 22, 22, 0.08) !important;
   }
   
   .thought-item {

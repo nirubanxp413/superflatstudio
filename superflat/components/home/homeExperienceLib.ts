@@ -42,31 +42,50 @@ export const POC_SKETCH_DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur a
 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo inventore veritatis.`
 
-export const POC_THOUGHTS = [
+export type PocThought = {
+  title: string
+  image: string
+  /** ISO date — same formatter as /thought/[slug] */
+  publishedAt: string
+  /** Longform slug when a CMS-backed page exists */
+  slug?: string
+}
+
+export const POC_THOUGHTS: PocThought[] = [
   {
     title: 'Against neutral interfaces',
     image:
       'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80',
+    publishedAt: '2025-08-12T00:00:00.000Z',
+    slug: 'against-neutral-interfaces',
   },
   {
     title: 'Taste as product infrastructure',
     image:
       'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80',
+    publishedAt: '2025-06-02T00:00:00.000Z',
+    slug: 'taste-as-product-infrastructure',
   },
   {
     title: 'Sketching system behavior',
     image:
       'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80',
+    publishedAt: '2025-04-20T00:00:00.000Z',
+    slug: 'sketching-system-behavior',
   },
   {
     title: 'Interfaces for model steering',
     image:
       'https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=1200&q=80',
+    publishedAt: '2025-02-01T00:00:00.000Z',
+    slug: 'interfaces-for-model-steering',
   },
   {
     title: 'Composing creative tools',
     image:
       'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80',
+    publishedAt: '2024-11-18T00:00:00.000Z',
+    slug: 'composing-creative-tools',
   },
 ]
 
