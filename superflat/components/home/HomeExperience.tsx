@@ -743,24 +743,33 @@ export function HomeExperience({
         `<button type="button" class="sketches-dot ${index === 0 ? 'active' : ''}" data-sketch-index="${index}" aria-label="${escapeHtml(item.title)}" aria-current="${index === 0 ? 'true' : 'false'}"></button>`
     ).join('')
 
+    const sidebarGlyphSvg = `<svg class="sketches-sidebar-glyph" viewBox="0 0 32 24" width="32" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 4L4 12l8 8M20 4l8 8-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+
     wrapper.innerHTML = `
     <div class="sketches-frame" id="sketchesFrame">
       <div class="sketch-stage">
         <iframe title="${escapeHtml(sketchItems[0].title)}" class="sketch-canvas-frame" loading="eager"></iframe>
       </div>
-    </div>
-    <div class="sketches-right">
-      <div class="sketches-descriptor">
-        <div class="sketches-meta" id="sketchesMeta">
-          <div class="sketches-title">${escapeHtml(sketchItems[0].title)}</div>
-          <div class="sketches-desc">${escapeHtml(sketchItems[0].shortDescription)}</div>
+      <aside class="sketches-right" aria-label="Sketch details">
+        <div class="sketches-sidebar-surface">
+          <div class="sketches-sidebar-collapsed" aria-hidden="true">
+            ${sidebarGlyphSvg}
+          </div>
+          <div class="sketches-sidebar-body">
+            <div class="sketches-descriptor">
+              <div class="sketches-meta" id="sketchesMeta">
+                <div class="sketches-title">${escapeHtml(sketchItems[0].title)}</div>
+                <div class="sketches-desc">${escapeHtml(sketchItems[0].shortDescription)}</div>
+              </div>
+            </div>
+            <div class="sketches-pagination" role="group" aria-label="Sketch carousel">
+              <button type="button" class="${sketchesPaginationNavClass} sketches-pagination-prev" aria-label="Previous sketch"><span class="sketches-pagination-label">Prev</span></button>
+              <div class="sketches-indicators">${dots}</div>
+              <button type="button" class="${sketchesPaginationNavClass} sketches-pagination-next" aria-label="Next sketch"><span class="sketches-pagination-label">Next</span></button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="sketches-pagination" role="group" aria-label="Sketch carousel">
-        <button type="button" class="${sketchesPaginationNavClass} sketches-pagination-prev" aria-label="Previous sketch">‹</button>
-        <div class="sketches-indicators">${dots}</div>
-        <button type="button" class="${sketchesPaginationNavClass} sketches-pagination-next" aria-label="Next sketch">›</button>
-      </div>
+      </aside>
     </div>
   `
     contentRow.appendChild(wrapper)

@@ -387,79 +387,157 @@
   }
   
   .sketches-frame {
+    /* ease-out-quart — matches design spec for sidebar expand */
+    --sketches-sidebar-ease: cubic-bezier(0.25, 1, 0.5, 1);
     position: relative;
-    width: 66.666%;
-    flex: 0 0 auto;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
     border-radius: 10px;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid rgba(22, 22, 22, 0.35);
     background: linear-gradient(145deg, rgba(228, 229, 231, 0.95), rgba(181, 182, 184, 0.95));
     overflow: hidden;
+  }
+
+  .hero-container.hero-container--sketches .sketches-frame {
+    border-color: rgba(22, 22, 22, 0.55);
   }
   
   .sketches-wrapper {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    gap: 24px;
     overflow-x: hidden;
   }
   
-  /* Entry: canvas 0.6s from right; text fades up from +0.4s. Exit: reverse */
+  /* Entry: canvas 0.6s from right. Sidebar stays collapsed (inside frame). Exit: frame only */
   .sketches-wrapper.sketches-scene-enter .sketches-frame {
     transform: translateX(105%);
     animation: sketches-frame-enter 0.6s cubic-bezier(0.33, 0.04, 0.2, 1) forwards;
   }
   
-  .sketches-wrapper.sketches-scene-enter .sketches-right {
-    opacity: 0;
-    transform: translateY(18px);
-    animation: sketches-text-enter 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
-  }
-  
-  .sketches-wrapper.sketches-scene-exit .sketches-right {
-    animation: sketches-text-exit 0.4s cubic-bezier(0.895, 0.03, 0.685, 0.22) forwards;
-  }
-  
   .sketches-wrapper.sketches-scene-exit .sketches-frame {
-    animation: sketches-frame-exit 0.6s cubic-bezier(0.895, 0.03, 0.685, 0.22) 0.4s forwards;
+    animation: sketches-frame-exit 0.6s cubic-bezier(0.895, 0.03, 0.685, 0.22) forwards;
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   .sketches-right {
-    width: calc(33.333% - 24px);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    left: auto;
+    z-index: 2;
+    width: min(32vw, 300px);
+    max-width: calc(100% - 20px);
+    pointer-events: none;
+  }
+
+  .sketches-sidebar-surface {
+    pointer-events: auto;
+    /* Match .sketches-frame border-radius on leading edge when expanded */
+    --sketches-sidebar-radius: 10px;
+    --sketches-sidebar-thumb-size: clamp(72px, 11vw, 88px);
+    /* Anchor at bottom-right so width/height grow up-and-leftward without any layout snap. */
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: var(--sketches-sidebar-thumb-size);
+    height: var(--sketches-sidebar-thumb-size);
+    background: #0a0a0a;
+    border-radius: 6px;
+    transition:
+      width 0.3s var(--sketches-sidebar-ease),
+      height 0.3s var(--sketches-sidebar-ease),
+      border-radius 0.3s var(--sketches-sidebar-ease),
+      padding 0.3s var(--sketches-sidebar-ease);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  .sketches-sidebar-collapsed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    color: #ffffff;
+  }
+
+  .sketches-sidebar-glyph {
+    display: block;
+    width: clamp(22px, 3.2vw, 30px);
+    height: auto;
+  }
+
+  /* Collapsed: only the thumb is in the layout; body must not use flow or static absolute (was leaking text into the square). */
+  .sketches-sidebar-body {
+    display: none;
+    box-sizing: border-box;
+    flex-direction: column;
+    flex: 1 1 auto;
     min-height: 0;
+    width: 100%;
+    height: 100%;
+    gap: 16px;
+  }
+
+  .sketches-right:hover .sketches-sidebar-surface,
+  .sketches-right:focus-within .sketches-sidebar-surface {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--sketches-sidebar-radius);
+    padding: 20px 16px 18px;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .sketches-right:hover .sketches-sidebar-collapsed,
+  .sketches-right:focus-within .sketches-sidebar-collapsed {
+    display: none;
+  }
+
+  .sketches-right:hover .sketches-sidebar-body,
+  .sketches-right:focus-within .sketches-sidebar-body {
+    display: flex;
   }
   
   .sketches-descriptor {
     width: 100%;
-    height: auto;
-    min-height: 360px;
+    min-height: 0;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     row-gap: 0;
+    overflow-y: auto;
   }
   
   .sketches-pagination {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
+    width: 100%;
     flex-wrap: nowrap;
+    flex-shrink: 0;
+    gap: 0;
+    margin-top: auto;
+  }
+
+  .sketches-pagination-prev,
+  .sketches-pagination-next {
+    flex: 0 0 auto;
   }
 
   .sketches-indicators {
@@ -467,7 +545,8 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
+    min-width: 0;
     min-height: 14px;
   }
   
@@ -505,6 +584,8 @@
     position: absolute;
     inset: 0;
     overflow: hidden;
+    background: #ffffff;
+    border-radius: 4px;
   }
 
   .sketch-canvas-frame {
@@ -548,29 +629,40 @@
     white-space: pre-line;
   }
 
-  .hero-container.hero-container--sketches .sketches-meta {
-    color: var(--text-primary);
+  .hero-container.hero-container--sketches .sketches-right .sketches-title {
+    color: #ffffff;
+    font-size: clamp(20px, 2.2vw, 32px);
+    line-height: 1.2;
   }
 
-  .hero-container.hero-container--sketches .sketches-desc {
-    color: var(--text-secondary);
+  .hero-container.hero-container--sketches .sketches-right .sketches-desc {
+    margin-top: 28px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 15px;
+    line-height: 1.45;
   }
 
-  .hero-container.hero-container--sketches .sketches-dot {
-    border-color: rgba(22, 22, 22, 0.45);
+  .hero-container.hero-container--sketches .sketches-right .sketches-dot {
+    border-color: rgba(255, 255, 255, 0.5);
   }
 
-  .hero-container.hero-container--sketches .sketches-dot.active {
-    background: #161616;
-    border-color: #161616;
+  .hero-container.hero-container--sketches .sketches-right .sketches-dot.active {
+    background: #ffffff;
+    border-color: #ffffff;
   }
 
-  .hero-container.hero-container--sketches .sketches-pagination button {
-    color: rgba(22, 22, 22, 0.85) !important;
+  .hero-container.hero-container--sketches .sketches-right .sketches-pagination button {
+    color: rgba(255, 255, 255, 0.92) !important;
   }
 
-  .hero-container.hero-container--sketches .sketches-pagination button:hover {
-    background: rgba(22, 22, 22, 0.08) !important;
+  .hero-container.hero-container--sketches .sketches-right .sketches-pagination button:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .hero-container.hero-container--sketches .sketches-pagination-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
   }
   
   .thought-item {
@@ -652,40 +744,85 @@
       min-height: 200px;
     }
   
-    .sketches-frame {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 1024 / 700;
-    }
-  
     .sketches-wrapper {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
       justify-content: flex-start;
       padding-bottom: 20px;
-      gap: 18px;
     }
-  
-    .sketches-right {
+
+    .sketches-frame {
+      display: flex;
+      flex-direction: column;
       width: 100%;
       height: auto;
-      gap: 18px;
+      flex: 1 1 auto;
+      min-height: 0;
     }
-  
+
+    .sketch-stage {
+      position: relative;
+      flex: 0 0 auto;
+      width: 100%;
+      aspect-ratio: 1024 / 700;
+      min-height: 200px;
+    }
+
+    .sketches-right {
+      position: relative;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      width: 100%;
+      max-width: none;
+      flex: 0 0 auto;
+      padding: 10px 0 0;
+      pointer-events: auto;
+      justify-content: flex-start;
+    }
+
+    .sketches-sidebar-surface {
+      align-self: stretch !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0;
+      border-radius: 10px !important;
+      padding: 16px !important;
+      justify-content: space-between !important;
+      align-items: stretch !important;
+    }
+
+    .sketches-sidebar-collapsed {
+      display: none !important;
+    }
+
+    .sketches-sidebar-body {
+      position: relative !important;
+      width: 100% !important;
+      height: auto !important;
+      margin: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      pointer-events: auto !important;
+    }
+
     .sketches-descriptor {
       width: 100%;
       height: auto;
       row-gap: 18px;
     }
-  
+
     .sketches-meta {
       width: 100%;
     }
-  
+
     .sketches-title {
       font-size: clamp(24px, 6vw, 40px);
     }
-  
+
     .sketches-desc {
       margin-top: 18px;
     }
