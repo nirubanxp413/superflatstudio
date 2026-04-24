@@ -8,5 +8,6 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion: '2024-01-01',
-  useCdn: true,
+  /** API in dev so publishes show up immediately; CDN in prod (ISR revalidates the page). */
+  useCdn: process.env.NODE_ENV === 'production',
 })

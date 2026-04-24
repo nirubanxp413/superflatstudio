@@ -1,11 +1,20 @@
 import { Container } from '@/components/ui'
+import { renderPortableInlineSpans } from './textBlockUtils'
 
 export type PTChild = { _key?: string; _type: 'span'; text: string; marks?: string[] }
+
+export type PTMarkDef = {
+  _key: string
+  _type: string
+  href?: string
+}
+
 export type PTBlock = {
   _key?: string
   _type: 'block'
   style: 'normal' | 'h2' | 'h3' | 'blockquote'
   children: PTChild[]
+  markDefs?: PTMarkDef[]
 }
 
 export type TextBlockAlign = 'left' | 'right' | 'center'
@@ -15,24 +24,10 @@ interface TextBlockData {
   align?: TextBlockAlign
 }
 
-function renderChildren(children: PTChild[]) {
-  return children.map((child, i) => {
-    const marks = child.marks ?? []
-    let node: React.ReactNode = child.text
-    if (marks.includes('strong')) node = <strong key={i}>{node}</strong>
-    if (marks.includes('em')) node = <em key={i}>{node}</em>
-    if (marks.includes('code'))
-      node = (
-        <code key={i} className="font-mono text-code-sm bg-layer px-01 rounded-none">
-          {node}
-        </code>
-      )
-    return <span key={i}>{node}</span>
-  })
-}
-
 function renderBlock(block: PTBlock, idx: number) {
-  const text = renderChildren(block.children)
+  const text = renderPortableInlineSpans(block.children, block.markDefs, {
+    codeClassName: 'font-mono text-code-sm bg-layer px-01 rounded-none',
+  })
 
   switch (block.style) {
     case 'h2':

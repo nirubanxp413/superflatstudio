@@ -1,12 +1,11 @@
 import { Text } from '@/components/ui'
 import { formatPublishedDate } from '@/lib/formatPublishedDate'
 
-/** Padded reading column — header, footer, and any content not wrapped by `Container` */
-export const thoughtArticleColumnClassName =
-  'max-w-6xl w-full mx-auto px-4 md:px-8'
+/** Padded reading column — matches `.app-shell` horizontal gutter (home blue hero width) */
+export const thoughtArticleColumnClassName = 'w-full px-[56px]'
 
-/** Narrow wrapper for `BlockRenderer` only — blocks use inner `Container` for horizontal padding */
-export const thoughtBlocksColumnClassName = 'max-w-6xl w-full mx-auto'
+/** Wrapper for `BlockRenderer` — same outer width as home hero; blocks use inner `Container` for padding */
+export const thoughtBlocksColumnClassName = 'w-full px-[56px]'
 
 export type ThoughtHeaderProps = {
   title: string

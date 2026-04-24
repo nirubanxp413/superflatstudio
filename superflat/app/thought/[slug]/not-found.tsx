@@ -14,8 +14,8 @@ export default function ThoughtNotFound() {
         <Text as="p" variant="body-sm" className="text-text-secondary mb-08">
           That slug is not published as longform yet, or the URL is wrong.
         </Text>
-        <Button as={Link} href="/#thought" variant="ghost" size="sm">
-          ← Back to Thought
+        <Button as={Link} href="/" variant="ghost" size="sm" className="!border-0 !text-[var(--brand)]">
+          Home
         </Button>
       </Container>
     </div>

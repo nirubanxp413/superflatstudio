@@ -92,3 +92,33 @@ export const allThoughtSlugsQuery = `
   "slug": slug.current
 }
 `
+
+/** Older / newer neighbors by publish time (chronological previous & next). */
+export const thoughtNeighborsQuery = `
+{
+  "prev": *[_type == "thought" && coalesce(publishedAt, _updatedAt) < $publishedAt] | order(coalesce(publishedAt, _updatedAt) desc)[0] {
+    title,
+    "slug": slug.current
+  },
+  "next": *[_type == "thought" && coalesce(publishedAt, _updatedAt) > $publishedAt] | order(coalesce(publishedAt, _updatedAt) asc)[0] {
+    title,
+    "slug": slug.current
+  }
+}
+`
+
+/** Slug for the homepage About overlay document in Sanity (Static page). */
+export const ABOUT_STATIC_PAGE_SLUG = 'about-me'
+
+/** Homepage About overlay — create a Static page with slug \`about-me\`. */
+export const staticPageBySlugQuery = `
+*[_type == "staticPage" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  "portraitUrl": portrait.asset->url,
+  portraitAlt,
+  body,
+  linkedInUrl
+}
+`

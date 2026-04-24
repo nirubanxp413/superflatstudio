@@ -4,7 +4,7 @@ export default function ThoughtLayout({ children }: { children: ReactNode }) {
   return (
     <div
       data-theme="light"
-      className="min-h-screen bg-background text-text-primary"
+      className="flex min-h-screen min-h-dvh flex-col bg-background text-text-primary"
     >
       {children}
     </div>

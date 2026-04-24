@@ -140,6 +140,182 @@
     padding: 0;
     cursor: pointer;
   }
+
+  /* Full-screen About dialog (above footer; homeShell z-index is 10000) */
+  .about-overlay {
+    --about-anim-dur: 0.2s;
+    /* easeOutQuart — matches JS easeOutQuart feel */
+    --about-bg-ease: cubic-bezier(0.25, 1, 0.5, 1);
+
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    pointer-events: auto;
+  }
+
+  /* Solid fill; height 0 → full viewport on open (reverse on close) */
+  .about-overlay-bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 0;
+    /* Explicit opaque fill — do not rely on inherited custom props */
+    background-color: #ffffff;
+    transition: height var(--about-anim-dur) var(--about-bg-ease);
+    overflow: hidden;
+  }
+
+  .about-overlay--open .about-overlay-bg {
+    height: 100dvh;
+    min-height: 100%;
+  }
+
+  .about-overlay-dismiss {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  .about-overlay-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--gutter-top) + 8px) var(--gutter-x) var(--gutter-bottom);
+    pointer-events: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .about-overlay-fade {
+    width: 100%;
+    max-width: 420px;
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--about-anim-dur) ease;
+  }
+
+  .about-overlay--open .about-overlay-fade {
+    opacity: 1;
+  }
+
+  .about-overlay-close {
+    position: absolute;
+    top: calc(var(--gutter-top) + 8px - 4px);
+    right: calc(var(--gutter-x) - 4px);
+    pointer-events: auto;
+    font-size: 36px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--ink-fade);
+    padding: 4px 10px;
+  }
+
+  .about-overlay-close:hover {
+    color: var(--ink);
+  }
+
+  .about-overlay-inner {
+    pointer-events: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 24px;
+    padding-bottom: 32px;
+  }
+
+  .about-overlay-portrait {
+    width: min(200px, 48vw);
+    height: auto;
+    aspect-ratio: 1;
+    /* Tailwind rounded-md */
+    border-radius: 0.375rem;
+    object-fit: cover;
+    background: var(--card);
+    margin-bottom: 28px;
+  }
+
+  .about-overlay-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 28px;
+  }
+
+  .about-overlay-paragraph {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(0, 0, 0, 0.78);
+  }
+
+  .about-overlay-h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: rgba(0, 0, 0, 0.88);
+  }
+
+  .about-overlay-h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  .about-overlay-blockquote {
+    margin: 0;
+    padding-left: 1rem;
+    border-left: 3px solid var(--card);
+    font-size: 16px;
+    line-height: 1.55;
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .about-overlay-inline-link {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .about-overlay-inline-link:hover {
+    color: var(--ink);
+  }
+
+  .about-overlay-link {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .about-overlay-link:hover {
+    border-bottom-color: var(--blue);
+  }
   
   .thoughts-area {
     height: var(--main-viewport-h, 60vh);
@@ -396,13 +572,13 @@
     border-radius: 10px;
     box-sizing: border-box;
     padding: 10px;
-    border: 1px solid rgba(22, 22, 22, 0.35);
+    border: none;
     background: linear-gradient(145deg, rgba(228, 229, 231, 0.95), rgba(181, 182, 184, 0.95));
     overflow: hidden;
   }
 
   .hero-container.hero-container--sketches .sketches-frame {
-    border-color: rgba(22, 22, 22, 0.55);
+    border: none;
   }
   
   .sketches-wrapper {

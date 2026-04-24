@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation'
 import { BlockRenderer } from '@/components/blocks/BlockRenderer'
+import { ThoughtPageFrame } from '@/components/thought/ThoughtPageFrame'
 import {
   ThoughtHeader,
-  thoughtArticleColumnClassName,
   thoughtBlocksColumnClassName,
 } from '@/components/thought/ThoughtHeader'
-import { Button, Container } from '@/components/ui'
-import Link from 'next/link'
+import { ThoughtArticleNavFooter } from '@/components/thought/ThoughtArticleNavFooter'
+import { Container } from '@/components/ui'
 
 const IMG = (w: number, h: number, seed: number) =>
   `https://picsum.photos/seed/${seed}/${w}/${h}`
@@ -74,31 +74,23 @@ export default function DevThoughtLayoutPage() {
   return (
     <div
       data-theme="light"
-      className="min-h-screen bg-background text-text-primary pb-14"
+      className="flex min-h-screen min-h-dvh flex-col bg-background text-text-primary"
     >
-      <ThoughtHeader
-        title="Dev thought layout"
-        publishedAt={publishedAt}
-        description="Standfirst / dek text for layout validation. Not in the CMS."
-      />
-
-      <div className={`${thoughtBlocksColumnClassName} pb-10`}>
-        <BlockRenderer blocks={FIXTURE_BLOCKS} />
-      </div>
-
-      <div className={thoughtArticleColumnClassName}>
-        <div className="pt-06 border-t border-border-subtle">
-          <Button as={Link} href="/#thought" variant="ghost" size="sm">
-            ← Back to Thought
-          </Button>
+      <ThoughtPageFrame bottomNav={<ThoughtArticleNavFooter prev={null} next={null} />}>
+        <Container>
+          <p className="text-xs font-mono text-text-muted py-06">
+            /dev/thought — returns 404 in production
+          </p>
+        </Container>
+        <ThoughtHeader
+          title="Dev thought layout"
+          publishedAt={publishedAt}
+          description="Standfirst / dek text for layout validation. Not in the CMS."
+        />
+        <div className={`${thoughtBlocksColumnClassName} pb-10`}>
+          <BlockRenderer blocks={FIXTURE_BLOCKS} />
         </div>
-      </div>
-
-      <Container>
-        <p className="text-xs font-mono text-text-muted py-06">
-          /dev/thought — returns 404 in production
-        </p>
-      </Container>
+      </ThoughtPageFrame>
     </div>
   )
 }

@@ -16,19 +16,25 @@ import {
   type ProjectsSceneRef,
 } from './homeExperienceLib'
 import { formatPublishedDate } from '@/lib/formatPublishedDate'
+import { SHOW_PROJECTS_NAV } from '@/lib/siteNavConfig'
+import { siteNavLinkClass } from '@/lib/siteNavLinkClass'
 import './homeExperience.css'
 import { ThoughtListItem } from './ThoughtListItem'
+import { AboutOverlay } from './AboutOverlay'
 import { buttonVariantClasses } from '@/components/button'
 import {
   useHeroNavTransition,
   type HeroNavTransitionDeps,
 } from './useHeroNavTransition'
+import type { PTBlock } from '@/components/blocks/TextBlock'
 
-/**
- * Launch toggle: hide Work/Projects nav while there are no published project docs.
- * Flip to `true` to show both buttons again.
- */
-const SHOW_PROJECTS_NAV = false
+export type HomeAboutContent = {
+  portraitSrc: string
+  portraitAlt: string
+  bodyBlocks: PTBlock[] | null
+  fallbackParagraphs: string[]
+  linkedInUrl: string | null
+}
 
 type HomeSketch = {
   _id: string
@@ -49,22 +55,18 @@ type HomeThought = {
   publishedAt?: string
 }
 
-function navLinkClass(active: boolean) {
-  const base =
-    'nav-button text-2xl font-semibold leading-tight transition-colors duration-150'
-  if (active) return `${base} text-[var(--brand)]`
-  return `${base} text-[var(--muted)] hover:text-[var(--gray)]`
-}
-
 export function HomeExperience({
   sketches,
   thoughts,
+  about,
 }: {
   sketches: HomeSketch[]
   thoughts: HomeThought[]
+  about: HomeAboutContent
 }) {
   const activePageRef = useRef<HomePage>('home')
   const [thoughtMode, setThoughtMode] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
   const [carouselBleed, setCarouselBleed] = useState(false)
   const [thoughtPreview, setThoughtPreview] = useState<{
     src: string
@@ -862,8 +864,17 @@ export function HomeExperience({
   const { navPage, transitionPhase, requestNavigate } =
     useHeroNavTransition(transitionDeps)
 
+  const closeAboutAndNavigate = useCallback(
+    (page: HomePage) => {
+      setAboutOpen(false)
+      void requestNavigate(page)
+    },
+    [requestNavigate]
+  )
+
   const goToThoughts = useCallback(() => {
     if (thoughtMode) return
+    setAboutOpen(false)
     if (thoughtsAreaRef.current) thoughtsAreaRef.current.scrollTop = 0
     setThoughtMode(true)
     updateMainViewportHeight()
@@ -872,14 +883,23 @@ export function HomeExperience({
   useEffect(() => {
     updateMainViewportHeight()
     window.addEventListener('resize', updateMainViewportHeight)
-    void requestNavigate('home')
 
-    if (window.location.hash === '#thought') {
+    const hash = window.location.hash
+    if (hash === '#thought') {
+      void requestNavigate('home')
       setThoughtMode(true)
       if (mainScrollViewportRef.current) {
         mainScrollViewportRef.current.scrollTop = 0
       }
       window.history.replaceState(null, '', window.location.pathname)
+    } else if (hash === '#sketches') {
+      void requestNavigate('sketches')
+      window.history.replaceState(null, '', window.location.pathname)
+    } else if (hash === '#projects' && SHOW_PROJECTS_NAV) {
+      void requestNavigate('projects')
+      window.history.replaceState(null, '', window.location.pathname)
+    } else {
+      void requestNavigate('home')
     }
 
     return () => {
@@ -978,7 +998,7 @@ export function HomeExperience({
           <div className="hero-footer-left gap-2">
             <button
               type="button"
-              className={navLinkClass(thoughtMode)}
+              className={`nav-button ${siteNavLinkClass(thoughtMode)}`}
               onClick={goToThoughts}
             >
               Thought
@@ -986,8 +1006,8 @@ export function HomeExperience({
             {SHOW_PROJECTS_NAV ? (
               <button
                 type="button"
-                className={navLinkClass(!thoughtMode && navPage === 'home')}
-                onClick={() => void requestNavigate('home')}
+                className={`nav-button ${siteNavLinkClass(!thoughtMode && navPage === 'home' && !aboutOpen)}`}
+                onClick={() => closeAboutAndNavigate('home')}
               >
                 Work
               </button>
@@ -995,29 +1015,45 @@ export function HomeExperience({
             {SHOW_PROJECTS_NAV ? (
               <button
                 type="button"
-                className={navLinkClass(!thoughtMode && navPage === 'projects')}
-                onClick={() => void requestNavigate('projects')}
+                className={`nav-button ${siteNavLinkClass(!thoughtMode && navPage === 'projects')}`}
+                onClick={() => closeAboutAndNavigate('projects')}
               >
                 Projects
               </button>
             ) : null}
             <button
               type="button"
-              className={navLinkClass(!thoughtMode && navPage === 'sketches')}
-              onClick={() => void requestNavigate('sketches')}
+              className={`nav-button ${siteNavLinkClass(!thoughtMode && navPage === 'sketches')}`}
+              onClick={() => closeAboutAndNavigate('sketches')}
             >
               Sketches
             </button>
           </div>
           <button
             type="button"
-            className={navLinkClass(!thoughtMode && navPage === 'home')}
-            onClick={() => void requestNavigate('home')}
+            className={`nav-button ${siteNavLinkClass(!thoughtMode && (aboutOpen || navPage === 'home'))}`}
+            onClick={() => {
+              if (aboutOpen) {
+                setAboutOpen(false)
+                return
+              }
+              setAboutOpen(true)
+              void requestNavigate('home')
+            }}
           >
             About
           </button>
         </footer>
       </main>
+      <AboutOverlay
+        open={aboutOpen}
+        onClose={() => setAboutOpen(false)}
+        portraitSrc={about.portraitSrc}
+        portraitAlt={about.portraitAlt}
+        bodyBlocks={about.bodyBlocks}
+        fallbackParagraphs={about.fallbackParagraphs}
+        linkedInUrl={about.linkedInUrl}
+      />
     </div>
   )
 }
