@@ -30,6 +30,9 @@ export default defineConfig({
             S.listItem()
               .title('Sketches')
               .child(S.documentTypeList('sketch').title('Sketches')),
+            S.listItem()
+              .title('Store')
+              .child(S.documentTypeList('appPage').title('Products')),
           ]),
     }),
     visionTool(),

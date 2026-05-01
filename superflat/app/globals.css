@@ -23,7 +23,7 @@
   --text: #f0f0f0;
   --gray: #666;
   --border: #333;
-  --brand: #2A7AE4;
+  --brand: #003fff;
   --muted: #333;
   /* Code surface + text — adapt to theme */
   --code-bg: #e8e8e8;
@@ -51,7 +51,7 @@
   --text: #0a0a0a;
   --gray: #555;
   --border: #ddd;
-  --brand: #1a6bd4;
+  --brand: #003fff;
   --muted: #ccc;
   --code-bg: #e8e8e8;
   --code-text: #161616;

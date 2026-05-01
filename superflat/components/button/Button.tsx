@@ -8,7 +8,7 @@ export type ButtonVariant = 'default' | 'borderless'
 
 /** Shared layout, motion, focus — paired with a surface variant below. */
 const buttonSharedClass =
-  'inline-flex items-center justify-center gap-1.5 px-3 py-3 text-sm rounded-sm transition-[color,background-color,border-color,transform,box-shadow] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-45 disabled:active:translate-y-0 [&_svg]:block [&_svg]:size-4 [&_svg]:shrink-0'
+  'inline-flex items-center justify-center gap-1.5 px-3 py-1 text-sm rounded-sm transition-[color,background-color,border-color,transform,box-shadow] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-45 disabled:active:translate-y-0 [&_svg]:block [&_svg]:size-4 [&_svg]:shrink-0'
 
 const defaultSurfaceClass =
   'border border-[color:var(--border)] bg-[var(--code-bg)] text-[color:var(--text)] hover:bg-[color-mix(in_srgb,var(--code-bg)_86%,var(--text)_14%)] active:bg-[color-mix(in_srgb,var(--code-bg)_72%,var(--text)_28%)] active:translate-y-px'

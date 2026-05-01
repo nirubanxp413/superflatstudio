@@ -122,3 +122,54 @@ export const staticPageBySlugQuery = `
   linkedInUrl
 }
 `
+
+export const storeProductsListQuery = `
+*[_type == "appPage" && defined(slug.current)] | order(coalesce(publishedAt, _updatedAt) desc) {
+  title,
+  "slug": slug.current,
+  description,
+  "thumbnailUrl": thumbnail.asset->url
+}
+`
+
+export const storeProductSlugsQuery = `
+*[_type == "appPage" && defined(slug.current)] {
+  "slug": slug.current
+}
+`
+
+export const storeProductBySlugQuery = `
+*[_type == "appPage" && slug.current == $slug][0] {
+  _id,
+  title,
+  seoTitle,
+  description,
+  "slug": slug.current,
+  "publishedAt": coalesce(publishedAt, _updatedAt),
+  "thumbnailUrl": thumbnail.asset->url,
+  blocks[] {
+    ...,
+    _type == "appBlockHeroType1" => {
+      "heroBackgroundImageUrl": heroBackgroundImage.asset->url,
+      "screenshotUrl": screenshot.asset->url
+    },
+    _type == "appBlockFeatureSection" => {
+      "imageUrl": image.asset->url
+    },
+    _type == "appBlockWithAndWithout" => {
+      "leftImageUrl": leftImage.asset->url,
+      "rightImageUrl": rightImage.asset->url
+    },
+    _type == "appBlockWorksWith" => {
+      lead,
+      variant,
+      tiles[] {
+        name,
+        href,
+        logoAlt,
+        "logoUrl": logo.asset->url
+      }
+    }
+  }
+}
+`

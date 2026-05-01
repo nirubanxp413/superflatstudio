@@ -2,6 +2,14 @@
 const nextConfig = {
   transpilePackages: ['p5'],
 
+  async redirects() {
+    return [
+      { source: '/apphub', destination: '/store', permanent: true },
+      { source: '/apphub/', destination: '/store', permanent: true },
+      { source: '/apphub/:slug', destination: '/store/:slug', permanent: true },
+    ]
+  },
+
   webpack(config, { isServer }) {
     // Sanity Studio uses browser-only APIs; exclude it from the server bundle
     if (isServer) {

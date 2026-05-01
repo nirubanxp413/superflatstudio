@@ -3,6 +3,22 @@
 import { useEffect, useState, type SVGProps } from 'react'
 import Link from 'next/link'
 
+import {
+  FaqAccordion,
+  FeatureGrid,
+  FeatureInteractiveGrid,
+  FeatureSection,
+  FinalConversionBand,
+  FooterCta,
+  HeroType1,
+  NavbarHeader,
+  SocialProof,
+  Steps,
+  UseCasePersona,
+  WithAndWithout,
+  WorksWith,
+} from '@/components/apps'
+import type { AppsHeroMediaBackground } from '@/components/apps'
 import { Button } from '@/components/button'
 
 function IconChevronLeft(props: SVGProps<SVGSVGElement>) {
@@ -25,6 +41,61 @@ function IconPlus(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden {...props}>
       <path d="M8 3v10M3 8h10" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function IconCalendar(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden {...props}>
+      <rect x="3.5" y="5.5" width="17" height="15" rx="2.5" />
+      <path d="M3.5 9.5h17M8 3.5v4M16 3.5v4" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function IconSparkles(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden {...props}>
+      <path d="m12 3 1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3ZM5 16l.9 2.1L8 19l-2.1.9L5 22l-.9-2.1L2 19l2.1-.9L5 16Zm14-1 1.1 2.6L23 18.7l-2.9 1.1L19 22.4l-1.1-2.6L15 18.7l2.9-1.1L19 15Z" />
+    </svg>
+  )
+}
+
+function IconClipboard(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden {...props}>
+      <rect x="6" y="4.5" width="12" height="16" rx="2" />
+      <path d="M9 4.5h6v3H9zM9 10h6M9 14h6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function CompanyWordmark({
+  label,
+  className,
+}: {
+  label: string
+  className?: string
+}) {
+  return (
+    <svg
+      viewBox="0 0 160 24"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden
+    >
+      <text
+        x="80"
+        y="16"
+        textAnchor="middle"
+        fontFamily="IBM Plex Sans, sans-serif"
+        fontSize="15"
+        fontWeight="600"
+        fill="currentColor"
+      >
+        {label}
+      </text>
     </svg>
   )
 }
@@ -330,6 +401,8 @@ function Section({
 
 export default function TailwindShowcasePage() {
   const [siteLight, setSiteLight] = useState(false)
+  const [heroMediaBg, setHeroMediaBg] = useState<AppsHeroMediaBackground>('dotted')
+  const [heroWithAppScreenshot, setHeroWithAppScreenshot] = useState(true)
 
   useEffect(() => {
     const root = document.documentElement
@@ -665,6 +738,334 @@ export default function TailwindShowcasePage() {
           Route: <code className="text-[color:var(--text)] opacity-80">/dev/tailwind-showcase</code> — safe to remove or
           gate in production.
         </footer>
+      </div>
+
+      <div className="pb-16">
+        <div className="mx-auto max-w-6xl px-4 md:px-8">
+          <Section
+            title="Apps components preview"
+            subtitle="Visual reference for the new CMS-composable apps page blocks."
+          >
+            <p className="max-w-3xl text-sm text-[color:var(--gray)]">
+              Includes Navbar, Hero, Social Proof, Feature Grid, Persona Tabs, Feature Sections, With & Without,
+              Steps, Works With, FAQ, and conversion CTAs.
+            </p>
+          </Section>
+        </div>
+
+        <NavbarHeader
+          brand="Temporal"
+          navItems={[
+            { label: 'Features', href: '#features' },
+            { label: 'How it works', href: '#how' },
+            { label: 'Pricing', href: '#pricing' },
+          ]}
+          cta={{ label: 'Get started', href: '/apps/tone-modulator' }}
+        />
+
+        <div
+          className="mx-auto mb-04 max-w-6xl px-4 md:px-8"
+          style={{ color: 'var(--text)' }}
+        >
+          <p className="mb-03 font-mono text-xs text-[color:var(--gray)]">HeroType1 · preview CMS props</p>
+          <div className="flex flex-wrap items-center gap-04">
+            <div className="flex flex-wrap items-center gap-02">
+              <span className="font-mono text-xs text-[color:var(--gray)]">Media background</span>
+              <button
+                type="button"
+                onClick={() => setHeroMediaBg('dotted')}
+                className="border px-3 py-1 font-mono text-xs transition-colors"
+                style={{
+                  borderColor: 'var(--border)',
+                  backgroundColor:
+                    heroMediaBg === 'dotted' ? 'color-mix(in srgb, var(--text) 12%, var(--bg))' : 'var(--code-bg)',
+                  color: 'var(--text)',
+                }}
+              >
+                Dotted
+              </button>
+              <button
+                type="button"
+                onClick={() => setHeroMediaBg('image')}
+                className="border px-3 py-1 font-mono text-xs transition-colors"
+                style={{
+                  borderColor: 'var(--border)',
+                  backgroundColor:
+                    heroMediaBg === 'image' ? 'color-mix(in srgb, var(--text) 12%, var(--bg))' : 'var(--code-bg)',
+                  color: 'var(--text)',
+                }}
+              >
+                Image (HeroImg)
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center gap-02">
+              <span className="font-mono text-xs text-[color:var(--gray)]">App screenshot</span>
+              <button
+                type="button"
+                onClick={() => setHeroWithAppScreenshot(true)}
+                className="border px-3 py-1 font-mono text-xs transition-colors"
+                style={{
+                  borderColor: 'var(--border)',
+                  backgroundColor: heroWithAppScreenshot
+                    ? 'color-mix(in srgb, var(--text) 12%, var(--bg))'
+                    : 'var(--code-bg)',
+                  color: 'var(--text)',
+                }}
+              >
+                With image
+              </button>
+              <button
+                type="button"
+                onClick={() => setHeroWithAppScreenshot(false)}
+                className="border px-3 py-1 font-mono text-xs transition-colors"
+                style={{
+                  borderColor: 'var(--border)',
+                  backgroundColor: !heroWithAppScreenshot
+                    ? 'color-mix(in srgb, var(--text) 12%, var(--bg))'
+                    : 'var(--code-bg)',
+                  color: 'var(--text)',
+                }}
+              >
+                Without image
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <HeroType1
+          title="Main Title of the landing page"
+          subtitle="This section uses the shared dotted surface and optional media/button."
+          cta={{ label: 'Open app', href: '/apps/tone-modulator', variant: 'secondary' }}
+          mediaBackground={heroMediaBg}
+          heroBackgroundImageSrc="/HeroImg.png"
+          imageSrc={heroWithAppScreenshot ? '/AppScreenshot.png' : undefined}
+          imageAlt="App screenshot"
+        />
+
+        <SocialProof
+          title="Social proof"
+          items={[
+            {
+              quote: 'We recovered 6-8 focus hours per week after one day of setup.',
+              author: 'Priya Menon',
+              role: 'Product Lead, Northstar',
+            },
+            {
+              quote: 'The auto-suggest mode is the first planner our whole team actually adopted.',
+              author: 'Sam G',
+              role: 'Engineering Manager, Strata',
+            },
+            {
+              quote: 'It blocks deep-work windows without breaking recurring collaboration rituals.',
+              author: 'Marta Ruiz',
+              role: 'Design Director, Kite',
+            },
+          ]}
+        />
+
+        <FeatureGrid
+          title="Feature grid"
+          items={[
+            {
+              icon: <IconCalendar className="h-5 w-5" />,
+              title: 'Fast calendar sync',
+              description: 'Connects in under 30 seconds and imports events instantly.',
+            },
+            {
+              icon: <IconSparkles className="h-5 w-5" />,
+              title: 'Focus window detection',
+              description: 'Learns your best cognitive hours from patterns in your week.',
+            },
+            {
+              icon: <IconClipboard className="h-5 w-5" />,
+              title: 'Flexible control modes',
+              description: 'Choose manual, suggested approvals, or fully automatic handling.',
+            },
+          ]}
+        />
+
+        <UseCasePersona
+          title="Use case persona"
+          tabs={[
+            {
+              id: 'founders',
+              label: 'Founders',
+              title: 'Protect strategy time',
+              description: 'Keep your highest-leverage blocks protected while still handling urgent ops.',
+              bullets: ['Auto-defends 2 deep blocks daily', 'Flags context-switch-heavy days'],
+              cta: { label: 'Try founder setup', href: '/apps/tone-modulator' },
+            },
+            {
+              id: 'designers',
+              label: 'Designers',
+              title: 'Batch creative time',
+              description: 'Group reviews and meetings so your making time stays uninterrupted.',
+              bullets: ['Optimizes around review cadence', 'Prevents mid-flow interruptions'],
+              cta: { label: 'Try designer setup', href: '/apps/tone-modulator' },
+            },
+            {
+              id: 'eng-managers',
+              label: 'Eng managers',
+              title: 'Balance people and execution',
+              description: 'Maintain team support windows without losing your own execution time.',
+              bullets: ['Protects maker blocks', 'Schedules 1:1 and standups intelligently'],
+              cta: { label: 'Try team setup', href: '/apps/tone-modulator' },
+            },
+          ]}
+        />
+
+        <FeatureSection
+          title="Feature title"
+          paragraph="Text paragraph continues like this for a bit. This column remains left-aligned while the media area can control image alignment."
+          mode="textLeft"
+          imageAlign="center"
+          cta={{ label: 'Learn more', href: '/apps/tone-modulator', variant: 'secondary' }}
+        />
+
+        <FeatureSection
+          title="Feature title"
+          paragraph="The right-text variant flips columns while preserving the same dotted media pattern and 1/3 to 2/3 layout ratio."
+          mode="textRight"
+          imageAlign="left"
+          cta={{ label: 'Try now', href: '/apps/tone-modulator', variant: 'secondary' }}
+        />
+
+        <FeatureInteractiveGrid
+          title="Power anything. One API, every platform."
+          description="Turn your content into a governed knowledge layer that powers applications and AI agents."
+          defaultSelectedIndex={1}
+          items={[
+            {
+              id: 'marketing-bot',
+              title: 'Marketing bot',
+              children: (
+                <p className="text-[11px] leading-relaxed text-current">
+                  Chat surface placeholder — swap for CMS image or rich content.
+                </p>
+              ),
+            },
+            {
+              id: 'agent-context',
+              title: 'Agent context',
+              children: (
+                <p className="text-[11px] leading-relaxed text-current">
+                  Active panel uses brand fill. Only one column selected at a time.
+                </p>
+              ),
+            },
+            {
+              id: 'pricing-bot',
+              title: 'Pricing bot',
+              children: (
+                <p className="text-[11px] leading-relaxed text-current">
+                  Inactive panels use a dark square over the dotted grid.
+                </p>
+              ),
+            },
+          ]}
+        />
+
+        <WithAndWithout
+          title="Not just when you're free. When you're focused."
+          description="Most schedulers fill your empty slots. Temporal learns when your brain works best and protects those hours for deep work."
+          left={{
+            imageSrc: '/legacy/project-dummy-preview.png',
+            imageAlt: 'Before state preview',
+          }}
+          right={{
+            imageSrc: '/legacy/project-dummy-preview.png',
+            imageAlt: 'After state preview',
+          }}
+        />
+
+        <Steps
+          title="Up in 30 seconds. Running in 2 minutes."
+          steps={[
+            {
+              stepLabel: 'STEP 01',
+              title: '30 seconds to connect',
+              description:
+                'Link your Google Calendar. Existing meetings are imported instantly. No manual setup, no double-booking.',
+              icon: <IconCalendar className="h-5 w-5" />,
+            },
+            {
+              stepLabel: 'STEP 02',
+              title: 'Temporal finds your focus windows',
+              description:
+                'AI reads your week, when meetings cluster, when mornings are free, and identifies your best hours for deep work.',
+              icon: <IconSparkles className="h-5 w-5" />,
+            },
+            {
+              stepLabel: 'STEP 03',
+              title: 'You choose how much control',
+              description:
+                'OFF: schedule manually. SUGGEST: AI proposes, you approve each change. AUTO: AI handles it. Switch anytime.',
+              icon: <IconClipboard className="h-5 w-5" />,
+            },
+          ]}
+        />
+
+        <WorksWith
+          lead="Works with"
+          apps={[
+            { name: 'Stripe', logoSvg: <CompanyWordmark label="stripe" className="h-full w-full" /> },
+            { name: 'OpenAI', logoSvg: <CompanyWordmark label="OpenAI" className="h-full w-full" /> },
+            { name: 'Linear', logoSvg: <CompanyWordmark label="Linear" className="h-full w-full" /> },
+            { name: 'Datadog', logoSvg: <CompanyWordmark label="DATADOG" className="h-full w-full" /> },
+            { name: 'NVIDIA', logoSvg: <CompanyWordmark label="NVIDIA" className="h-full w-full" /> },
+            { name: 'Figma', logoSvg: <CompanyWordmark label="Figma" className="h-full w-full" /> },
+            { name: 'Ramp', logoSvg: <CompanyWordmark label="ramp" className="h-full w-full" /> },
+            { name: 'Adobe', logoSvg: <CompanyWordmark label="Adobe" className="h-full w-full" /> },
+          ]}
+        />
+
+        <WorksWith
+          lead="Works with (image-square variant)"
+          variant="imageSquares"
+          apps={[
+            { name: 'Square 1', logoSrc: '/legacy/project-dummy-preview.png' },
+            { name: 'Square 2', logoSrc: '/legacy/project-dummy-preview.png' },
+            { name: 'Square 3', logoSrc: '/legacy/project-dummy-preview.png' },
+            { name: 'Square 4', logoSrc: '/legacy/project-dummy-preview.png' },
+            { name: 'Square 5', logoSrc: '/legacy/project-dummy-preview.png' },
+            { name: 'Square 6', logoSrc: '/legacy/project-dummy-preview.png' },
+          ]}
+        />
+
+        <FaqAccordion
+          title="FAQ"
+          items={[
+            {
+              question: 'Will this overwrite existing events?',
+              answer:
+                'No. Existing events are preserved. Suggestions and auto-actions respect current commitments.',
+            },
+            {
+              question: 'Can I approve changes manually?',
+              answer:
+                'Yes. Suggest mode gives you a review queue where each proposed move can be accepted or rejected.',
+            },
+            {
+              question: 'Can I turn automation off anytime?',
+              answer:
+                'Absolutely. Switch between OFF, SUGGEST, and AUTO at any time without losing your settings.',
+            },
+          ]}
+        />
+
+        <FinalConversionBand
+          title="Ready to protect your best hours?"
+          description="Set it up in minutes and start recovering deep-work time this week."
+          className="py-08"
+          primaryCta={{ label: 'Start free', href: '/apps/tone-modulator' }}
+          secondaryCta={{ label: 'Book demo', href: '/apps/tone-modulator' }}
+        />
+
+        <FooterCta
+          title="CTA"
+          cta={{ label: 'Launch app', href: '/apps/tone-modulator', variant: 'secondary' }}
+          className="pt-10"
+        />
       </div>
     </div>
   )
