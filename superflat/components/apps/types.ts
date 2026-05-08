@@ -17,6 +17,8 @@ export type WorksWithApp = {
   name: string
   logoSvg?: ReactNode
   logoSrc?: string
+  /** CMS-uploaded SVG asset URL when Works With display is “icons” */
+  iconSvgSrc?: string
   logoAlt?: string
   href?: string
 }

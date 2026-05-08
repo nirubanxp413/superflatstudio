@@ -154,6 +154,10 @@ export function StoreSanityBlocks({ blocks }: { blocks: unknown }) {
             : 'center'
         const imageUrl =
           typeof block.imageUrl === 'string' ? block.imageUrl : undefined
+        const showCta = block.showCta !== false
+        const showHeadingIcon = block.showHeadingIcon === true
+        const headingIcon =
+          typeof block.headingIcon === 'string' ? block.headingIcon : 'sparkle'
         nodes.push(
           <FeatureSection
             key={key}
@@ -165,6 +169,9 @@ export function StoreSanityBlocks({ blocks }: { blocks: unknown }) {
               typeof block.imageAlt === 'string' ? block.imageAlt : undefined
             }
             imageAlign={imageAlign}
+            showCta={showCta}
+            showHeadingIcon={showHeadingIcon}
+            headingIcon={headingIcon}
             cta={toCta(block.cta)}
           />
         )
@@ -228,6 +235,13 @@ export function StoreSanityBlocks({ blocks }: { blocks: unknown }) {
       }
       case 'appBlockWorksWith': {
         const rawTiles = block.tiles
+        const rawVariant = block.variant
+        const variant =
+          rawVariant === 'imageSquares'
+            ? 'imageSquares'
+            : rawVariant === 'icons'
+              ? 'icons'
+              : 'text'
         const tiles: WorksWithApp[] = Array.isArray(rawTiles)
           ? rawTiles.filter(isRecord).map((t) => {
               const name = typeof t.name === 'string' ? t.name : 'Partner'
@@ -237,13 +251,15 @@ export function StoreSanityBlocks({ blocks }: { blocks: unknown }) {
                   : undefined
               const logoSrc =
                 typeof t.logoUrl === 'string' && t.logoUrl ? t.logoUrl : undefined
+              const iconSvgSrc =
+                typeof t.iconSvgUrl === 'string' && t.iconSvgUrl
+                  ? t.iconSvgUrl
+                  : undefined
               const logoAlt =
                 typeof t.logoAlt === 'string' ? t.logoAlt : undefined
-              return {name, href, logoSrc, logoAlt}
+              return {name, href, logoSrc, iconSvgSrc, logoAlt}
             })
           : []
-        const variant =
-          block.variant === 'imageSquares' ? 'imageSquares' : 'wordmarkRow'
         const lead =
           typeof block.lead === 'string' && block.lead.trim()
             ? block.lead.trim()

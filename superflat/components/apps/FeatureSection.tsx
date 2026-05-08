@@ -1,4 +1,5 @@
 import { Text } from '@/components/ui'
+import { AppsBlockIcon } from './AppsBlockIcon'
 import { AppsCtaButton } from './AppsCtaButton'
 import { DottedSurface } from './DottedSurface'
 import { SiteContainer } from './SiteContainer'
@@ -11,6 +12,11 @@ type FeatureSectionProps = {
   imageSrc?: string
   imageAlt?: string
   imageAlign?: AppsFeatureImageAlign
+  /** When false, CTA is hidden even if `cta` is set (CMS toggle). */
+  showCta?: boolean
+  /** Same preset icons as Feature grid cards; shown above the heading when enabled. */
+  showHeadingIcon?: boolean
+  headingIcon?: string | null
   cta?: AppsCta
   containerClassName?: string
   className?: string
@@ -34,23 +40,33 @@ export function FeatureSection({
   imageSrc,
   imageAlt = '',
   imageAlign = 'center',
+  showCta = true,
+  showHeadingIcon = false,
+  headingIcon = 'sparkle',
   cta,
   containerClassName = '',
   className = '',
 }: FeatureSectionProps) {
+  const effectiveCta = showCta ? cta : undefined
+
   return (
     <section className={['mb-8', className].filter(Boolean).join(' ')}>
       <SiteContainer className={containerClassName}>
         <div className="rounded-md bg-gray-100 px-05 py-05 md:px-08 md:py-08">
           <div className={`grid gap-06 md:grid-cols-3 ${modeClass[mode]}`}>
             <div className="apps-feature-copy flex flex-col items-start justify-center gap-04">
+              {showHeadingIcon ? (
+                <div className="inline-flex rounded-sm bg-gray-200 p-02 text-slate-400">
+                  <AppsBlockIcon name={headingIcon} />
+                </div>
+              ) : null}
               <Text as="h2" variant="body" className="font-semibold text-neutral-950">
                 {title}
               </Text>
               <Text as="p" variant="body" className="text-neutral-600">
                 {paragraph}
               </Text>
-              {cta ? <AppsCtaButton cta={cta} /> : null}
+              {effectiveCta ? <AppsCtaButton cta={effectiveCta} /> : null}
             </div>
 
             <div className="apps-feature-media md:col-span-2">

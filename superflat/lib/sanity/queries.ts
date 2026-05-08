@@ -167,7 +167,8 @@ export const storeProductBySlugQuery = `
         name,
         href,
         logoAlt,
-        "logoUrl": logo.asset->url
+        "logoUrl": logo.asset->url,
+        "iconSvgUrl": iconSvg.asset->url
       }
     }
   }
