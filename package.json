@@ -1,14 +1,26 @@
 {
-  "name": "superflat-studio-monorepo",
+  "name": "superflatstudio_v2",
+  "version": "0.1.0",
   "private": true,
-  "version": "1.0.0",
-  "license": "UNLICENSED",
   "scripts": {
-    "dev": "cd superflat && npm run dev",
-    "build": "cd superflat && npm run build",
-    "start": "cd superflat && npm run start",
-    "studio:dev": "cd SanityStudio && npm run dev",
-    "studio:build": "cd SanityStudio && npm run build",
-    "studio:deploy": "cd SanityStudio && npm run deploy"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "16.3.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
